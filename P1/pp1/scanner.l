@@ -45,7 +45,6 @@ struct yyltype yylloc; // manually dclared for pp1, later Yacc provides
  */
 static void DoBeforeEachAction(); 
 #define YY_USER_ACTION DoBeforeEachAction();
-
 %}
 
  /* The section before the first %% is the Definitions section of the lex
@@ -54,13 +53,16 @@ static void DoBeforeEachAction();
   * as a simple substitution mechanism that allows for more readable
   * entries in the Rules section later. 
   */
-
+DIGIT [0-9]
+ID [a-z][a-z0-9]*
+KEYWORD void|int|double|bool|string|class|interface|null|this|extends|implements|for|while|if|else|return|break|New|NewArray
 
 %%             /* BEGIN RULES SECTION */
  /* All patterns and actions should be placed between the start and stop
   * %% markers which delimit the Rules section. 
   */ 
-
+{DIGIT}+ {printf("An DIGIT: %s \n", yytext);}
+{KEYWORD}+ {printf("A KEYWORD: %s \n", yytext);}
 %%
 /* The closing %% above marks the end of the Rules section and the beginning
  * of the User Subroutines section. All text from here to the end of the
@@ -92,7 +94,8 @@ void InitScanner()
  * ------------------------------
  * This function is installed as the YY_USER_ACTION. This is a place
  * to group code common to all actions.
- */
+ */	
 static void DoBeforeEachAction()
 {
+	
 }
