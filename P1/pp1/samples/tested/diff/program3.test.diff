@@ -1,0 +1,20 @@
+0a1,12
+> /            line 1 cols 1-1 is '/' 
+> *            line 1 cols 2-2 is '*' 
+> This         line 1 cols 4-7 is T_Identifier 
+> is           line 1 cols 9-10 is T_Identifier 
+> just         line 1 cols 12-15 is T_Identifier 
+> a            line 1 cols 17-17 is T_Identifier 
+> simple       line 1 cols 19-24 is T_Identifier 
+> program      line 1 cols 26-32 is T_Identifier 
+> with         line 1 cols 34-37 is T_Identifier 
+> objects      line 1 cols 39-45 is T_Identifier 
+> *            line 1 cols 47-47 is '*' 
+> /            line 1 cols 48-48 is '/' 
+77a90,95
+> /            line 20 cols 16-16 is '/' 
+> /            line 20 cols 17-17 is '/' 
+> Go           line 20 cols 19-20 is T_Identifier 
+> ,            line 20 cols 21-21 is ',' 
+> Betsy        line 20 cols 23-27 is T_Identifier 
+> !            line 20 cols 28-28 is '!' 
