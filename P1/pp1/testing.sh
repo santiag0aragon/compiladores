@@ -1,0 +1,34 @@
+	dcc < ./samples/badbool.frag >& ./samples/tested/badbool.test &
+	dcc < ./samples/baddouble.frag >& ./samples/tested/baddouble.test &
+	dcc < ./samples/badident.frag >& ./samples/tested/badident.test &
+	dcc < ./samples/badint.frag >& ./samples/tested/badint.test &
+	dcc < ./samples/badop.frag >& ./samples/tested/badop.test &
+	dcc < ./samples/badpre.frag >& ./samples/tested/badpre.test &
+	dcc < ./samples/badreserve.frag >& ./samples/tested/badreserve.test &
+	dcc < ./samples/badstring.frag >& ./samples/tested/badstring.test &
+	dcc < ./samples/comment.frag >& ./samples/tested/comment.test &
+	dcc < ./samples/define.frag >& ./samples/tested/define.test &
+	dcc < ./samples/ident.frag >& ./samples/tested/ident.test &
+	dcc < ./samples/number.frag >& ./samples/tested/number.test &
+	dcc < ./samples/program2.decaf >& ./samples/tested/program2.test &
+	dcc < ./samples/program3.decaf >& ./samples/tested/program3.test &
+	dcc < ./samples/reserve_op.frag >& ./samples/tested/reserve_op.test &
+	dcc < ./samples/string.frag >& ./samples/tested/string.test &
+
+
+	diff  ./samples/badbool.frag  ./samples/tested/badbool.test > ./samples/tested/badbool.test.diff &
+	diff  ./samples/baddouble.frag  ./samples/tested/baddouble.test > ./samples/tested/baddouble.test.diff &
+	diff  ./samples/badident.frag  ./samples/tested/badident.test > ./samples/tested/badident.test.diff &
+	diff  ./samples/badint.frag  ./samples/tested/badint.test > ./samples/tested/badint.test.diff &
+	diff  ./samples/badop.frag  ./samples/tested/badop.test > ./samples/tested/badop.test.diff &
+	diff  ./samples/badpre.frag  ./samples/tested/badpre.test > ./samples/tested/badpre.test.diff &
+	diff  ./samples/badreserve.frag  ./samples/tested/badreserve.test > ./samples/tested/badreserve.test.diff &
+	diff  ./samples/badstring.frag  ./samples/tested/badstring.test > ./samples/tested/badstring.test.diff &
+	diff  ./samples/comment.frag  ./samples/tested/comment.test > ./samples/tested/comment.test.diff &
+	diff  ./samples/define.frag  ./samples/tested/define.test > ./samples/tested/define.test.diff &
+	diff  ./samples/ident.frag  ./samples/tested/ident.test > ./samples/tested/ident.test.diff &
+	diff  ./samples/number.frag  ./samples/tested/number.test > ./samples/tested/number.test.diff &
+	diff  ./samples/program2.decaf  ./samples/tested/program2.test > ./samples/tested/program2.test.diff &
+	diff  ./samples/program3.decaf  ./samples/tested/program3.test > ./samples/tested/program3.test.diff &
+	diff  ./samples/reserve_op.frag  ./samples/tested/reserve_op.test > ./samples/tested/reserve_op.test.diff &
+	diff  ./samples/string.frag  ./samples/tested/string.test > ./samples/tested/string.test.diff &

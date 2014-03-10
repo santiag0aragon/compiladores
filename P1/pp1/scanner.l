@@ -32,6 +32,7 @@ YYSTYPE yylval;  // manually declared for pp1, later Yacc provides
  * just scanned to the client. (Operates similarly to yylval above)
  */
 struct yyltype yylloc; // manually dclared for pp1, later Yacc provides
+int num_lines, num_chars;
 
 /* Macro: YY_USER_ACTION 
  * ---------------------
@@ -45,6 +46,7 @@ struct yyltype yylloc; // manually dclared for pp1, later Yacc provides
  */
 static void DoBeforeEachAction(); 
 #define YY_USER_ACTION DoBeforeEachAction();
+#define TAB_LEN 8
 %}
 
  /* The section before the first %% is the Definitions section of the lex
@@ -53,16 +55,98 @@ static void DoBeforeEachAction();
   * as a simple substitution mechanism that allows for more readable
   * entries in the Rules section later. 
   */
-DIGIT [0-9]
-ID [a-z][a-z0-9]*
-KEYWORD void|int|double|bool|string|class|interface|null|this|extends|implements|for|while|if|else|return|break|New|NewArray
 
+  /*INVALID_CHARS ([\$\@\·\#\`\¨\´\¿\?\¡\~\^<\&\¬\º\ª])*/
+PUNCTUATION       ([\=\<\>\!\;\,\.\[\]\(\)\{\}])
+SIMPLE_OPERATOR   ([\+\-\*\/\%])
+SYMBOLS           ({PUNCTUATION}|{SIMPLE_OPERATOR})
+DECIMAL           ([0-9]+)
+ID                ([a-zA-Z][0-9a-zA-Z|_]*)
+BOOL              (true|false)
+HEXADECIMAL       (0[xX][0-9A-Fa-f]+)
+DOUBLE            ({DECIMAL}+\.{DECIMAL}*(([Ee][\+|-]?{DECIMAL}+))?)
+STRING            (\"[^\n\"]*\")
+UNTERM_STRIG      ((\"[^\"\n]*)|([^\"]\"\n)|(\"[^\"\n]*))
 %%             /* BEGIN RULES SECTION */
  /* All patterns and actions should be placed between the start and stop
   * %% markers which delimit the Rules section. 
-  */ 
-{DIGIT}+ {printf("An DIGIT: %s \n", yytext);}
-{KEYWORD}+ {printf("A KEYWORD: %s \n", yytext);}
+  */
+[\n]                   { num_chars = 1; num_lines++; }
+[\t]                   { num_chars += TAB_LEN - num_chars % TAB_LEN + 1; }
+[ ]                    ;
+	/* KEYWORDS MATCH */
+void 		      {return T_Void;}
+int			      {return T_Int;}
+double		    {return T_Double;}
+bool		      {return T_Bool;}
+string		    {return T_String;}
+class		      {return T_Class;}
+interface	    {return T_Interface;}
+null		      {return T_Null;}
+this 		      {return T_This;}
+extends 	    {return T_Extends;}
+implements 	  {return T_Implements;}
+for 		      {return T_For;}
+while 		    {return T_While;}
+if 			      {return T_If;}
+else 		      {return T_Else;}
+return 		    {return T_Return;}
+break 		    {return T_Break;}
+New 		      {return T_New;}
+NewArray 	    {return T_NewArray;}
+  /* DOUBLE OPERATOR MATCH*/  
+==            {return T_Equal;}
+!=            {return T_NotEqual;}
+\<=           {return T_LessEqual;}
+\>=           {return T_GreaterEqual;}
+&&            {return T_And;}
+\|\|          {return T_Or;}
+  /* INTEGER MATCH */
+{DECIMAL}     {
+               yylval.integerConstant = strtol(yytext, NULL,10 );
+               return T_IntConstant;
+              }
+{HEXADECIMAL}     {
+               yylval.integerConstant = strtol(yytext, NULL,16 );
+               return T_IntConstant;
+              }              
+  /* DOUBLE MATCH */
+{DOUBLE}     {
+               yylval.doubleConstant = strtof(yytext,NULL );
+               return T_DoubleConstant;
+              }
+  /* BOOL MATCH*/
+{BOOL} {
+        if(strcmp("true", yytext) == 0)
+          yylval.boolConstant = true;
+        else
+          yylval.boolConstant = false;
+        return T_BoolConstant;
+        }
+  /* ID MATCH */
+{ID} {
+      if (yyleng > MaxIdentLen)
+          ReportError::LongIdentifier(&yylloc, yytext);
+      strncpy(yylval.identifier, yytext, MaxIdentLen);
+      //yylval.identifier[MaxIdentLen] = '\0';
+      return T_Identifier; 
+      }
+  /* STRING MATCH */
+{STRING} {
+          yylval.stringConstant = yytext;
+          return T_StringConstant;
+          }
+{UNTERM_STRIG} {
+                num_chars = 1;
+                //num_lines = num_lines + 1;
+                ReportError::UntermString(&yylloc,yytext);    
+                }
+  /* SYMBOLS MATCH */
+{SYMBOLS}     {return yytext[0];}
+. {
+      ReportError::UnrecogChar(&yylloc, yytext[0]);
+  }
+
 %%
 /* The closing %% above marks the end of the Rules section and the beginning
  * of the User Subroutines section. All text from here to the end of the
@@ -87,6 +171,8 @@ void InitScanner()
 {
     PrintDebug("lex", "Initializing scanner");
     yy_flex_debug = false;
+    num_chars = 1;
+    num_lines = 1;
 }
 
 
@@ -97,5 +183,8 @@ void InitScanner()
  */	
 static void DoBeforeEachAction()
 {
-	
+ 	yylloc.first_line = yylloc.last_line = num_lines;
+ 	yylloc.first_column = num_chars;
+  yylloc.last_column = num_chars + yyleng - 1;
+ 	num_chars = num_chars + yyleng;
 }

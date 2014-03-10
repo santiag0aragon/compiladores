@@ -47,18 +47,18 @@ void ReportError::InvalidDirective(int linenum) {
 
 void ReportError::LongIdentifier(yyltype *loc, const char *ident) {
     stringstream s;
-    s << "Identifier too long: \"" << ident << "\"" << '\0';
+    s << "Identifier too long: \"" << ident << "\"";// << '\0';
     OutputError(loc, s.str());
 }
 
 void ReportError::UntermString(yyltype *loc, const char *str) {
     stringstream s;
-    s << "Unterminated string constant: " << str << '\0';
+    s << "Unterminated string constant: " << str ;//<< '\0';
     OutputError(loc, s.str());
 }
 
 void ReportError::UnrecogChar(yyltype *loc, char ch) {
     stringstream s;
-    s << "Unrecognized char: '" << ch << "'" << '\0';
+    s << "Unrecognized char: '" << ch << "'" ;//<< '\0';
     OutputError(loc, s.str());
 }
