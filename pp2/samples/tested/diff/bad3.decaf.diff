@@ -1,0 +1,9 @@
+2,6c2
+< *** Error line 6.
+<   a = ReadInteger();
+<   ^
+< *** parse error
+< 
+---
+> *** Erro
+\ No newline at end of file

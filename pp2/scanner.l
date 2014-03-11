@@ -97,6 +97,9 @@ SINGLE_COMMENT    ("//"[^\n]*)
 "else"              { return T_Else;        }
 "return"            { return T_Return;      }
 "break"             { return T_Break;       }
+"switch"            { return T_Switch; 		}
+"case"              { return T_Case; 		}
+"default"           { return T_Default; 	}
 "New"               { return T_New;         }
 "NewArray"          { return T_NewArray;    }
 "Print"             { return T_Print;       }
@@ -112,6 +115,8 @@ SINGLE_COMMENT    ("//"[^\n]*)
 "!="                { return T_NotEqual;    }
 "&&"                { return T_And;         }
 "||"                { return T_Or;          }
+"++"                { return T_Increment; 	}
+"--"                { return T_Decrement; 	}
 {OPERATOR}          { return yytext[0];     }
     
 "[]"                { return T_Dims;        }

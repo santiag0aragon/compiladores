@@ -1,0 +1,12 @@
+2,6c2,5
+< *** Error line 12.
+<   betsy = New(Cow, true);
+<                  ^
+< *** parse error
+< 
+---
+> *** Error line 11.
+>   Cow betsy;
+>       ^^^^^
+> *** 
+\ No newline at end of file

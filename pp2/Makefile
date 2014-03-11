@@ -88,3 +88,6 @@ depend:
 clean:
 	rm -f $(JUNK) y.output $(PRODUCTS)
 
+test:
+	test-all.sh
+
