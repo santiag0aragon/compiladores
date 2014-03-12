@@ -2,5 +2,5 @@
 *** Error line 2.
   x = 123.4.554;
             ^^^
-*** parse error
+*** syntax error
 

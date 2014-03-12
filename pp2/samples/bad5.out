@@ -2,5 +2,5 @@
 *** Error line 2.
    bool notgood, variables;
                ^
-*** parse error
+*** syntax error
 

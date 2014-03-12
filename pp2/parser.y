@@ -216,15 +216,18 @@ Decl      	:   VarDecl 			{   }
 		  	|	InterfaceDecl       {   }
           	;
 
-VarDecl 	: 	Type T_Identifier ';' { $$ = new VarDecl(new Identifier(@2, $2), $1); }
+VarDecl 	: 	Type T_Identifier ';' 
+									{ 
+										$$ = new VarDecl(new Identifier(@2, $2), $1); 
+									}
 			;
 
 Type     	:   T_Int       		{ $$ = Type::intType; }
           	|   T_Double    		{ $$ = Type::doubleType; }
           	|   T_Bool      		{ $$ = Type::boolType; }
           	|   T_String 			{ $$ = Type::stringType; }
-          	|   T_Identifier		{ $$ = new NamedType(new Identifier(@1, $1)); }	  
-          	|   Type T_Dims			{ $$ = new ArrayType(@1, $1);}
+          	|   T_Identifier		{ $$ = new NamedType(new Identifier(@1, $1)); }
+          	|   Type T_Dims			{ $$ = new ArrayType(@1, $1); }
           	;
 //TODO: quitar
 NamedType 	: 	T_Identifier		{ $$ = new NamedType(new Identifier(@1, $1)); }	          	
@@ -259,20 +262,23 @@ ClassDecl 	:	T_Class T_Identifier Extend Impl '{' Fields '}'
 										$$ = new ClassDecl(new Identifier(@2, $2), $3, $4, new List<Decl*>);
 									}
 
-Extend    	:   T_Extends NamedType 
-									{ $$ = $2; }
-          	|                       { $$ = NULL; }          
+Extend    	:   T_Extends T_Identifier		
+									{ 
+										$$ = new NamedType(new Identifier(@2, $2)); 
+									}
+			|                       {  }										          	
+          	         
           	;
 
 Impl      	:   T_Implements Implements 
                                     { $$ = $2; }
-          	|                       { $$ = new List<NamedType*>; }
+          	|                       {  }
           	;
 
 
 Implements 	:   Implements ',' NamedType 
-                                    { ($$ = $1)->Append($3); }
-           	|   NamedType           { ($$ = new List<NamedType*>)->Append($1); }
+                                    { ($$ = $1) -> Append($3); }
+           	|	NamedType			{ ($$ = new List<NamedType*>)->Append($1); }         	   
            	;    
 
 Fields     	:   Fields Field        { ($$ = $1)->Append($2); }
@@ -342,6 +348,7 @@ Stmts      	: 	Stmts Stmt          { ($$ = $1) -> Append($2); }
            	;
            
 Stmt       	: 	OptionalExpr ';' 	{ } 
+			//|	Expr ';'			{ }//conflicto
            	| 	IfStmt 				{ }
            	| 	WhileStmt 			{ }
            	| 	ForStmt 			{ }
@@ -406,8 +413,8 @@ Expr       :  AssignExpr 			{ }
            |  RelationalExpr 		{ }
            |  LogicalExpr 			{ }
            |  PostfixExpr 			{ }
-    	   |  T_ReadInteger '(' ')'  { $$ = new ReadIntegerExpr(Join(@1, @3)); }
-           |  T_ReadLine '(' ')'     { $$ = new ReadLineExpr(Join(@1, @3)); }
+    	   |  T_ReadInteger '(' ')'  { $$ = new ReadIntegerExpr(@1); }
+           |  T_ReadLine '(' ')'     { $$ = new ReadLineExpr(@1); }
            |  T_New T_Identifier     { $$ = new NewExpr(Join(@1, @2), new NamedType(new Identifier(@2, $2))); }
            |  T_NewArray '(' Expr ',' Type ')'
                                      { 
@@ -460,9 +467,10 @@ Exprs      : Exprs ',' Expr          { ($$ = $1)->Append($3); }
            | Expr                    { ($$ = new List<Expr*>)->Append($1); }
            ; 
 
-OptionalExpr    : Expr
-           |                         { $$ = new EmptyExpr(); }
-           ;
+OptionalExpr    :                   { $$ = new EmptyExpr(); }
+				| Expr				{ $$ = $1 ;}
+				| 					{ }
+           		;
  
             
 LValue     : FieldAccess  			{ }            
@@ -475,7 +483,7 @@ FieldAccess : T_Identifier           { $$ = new FieldAccess(NULL, new Identifier
             ;
 
 Call       : T_Identifier '(' Actuals ')' 
-                                     { $$ = new Call(Join(@1, @4), NULL, new Identifier(@1, $1), $3); }  
+                                     { $$ = new Call(@1, NULL, new Identifier(@1, $1), $3); }  
            | Expr '.' T_Identifier '(' Actuals ')'
                                      { $$ = new Call(Join(@1, @6), $1, new Identifier(@3, $3), $5); }
            ;

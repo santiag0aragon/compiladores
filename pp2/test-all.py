@@ -33,16 +33,25 @@ for _, _, files in os.walk(TEST_DIRECTORY):
     diffName = os.path.join(DIFF_DIR, file)
 
 
-    result = Popen('./dcc < ' + testName +'>& '+ testedName +'.test &', shell = True, stderr = STDOUT, stdout = PIPE)
-    result = Popen('diff ' + refName + ' '+ testedName+'.test' +' >' + diffName +'.diff &', shell = True, stdout = PIPE)
+    result = Popen('./dcc < ' + testName +'>& '+ testedName +'.test ', shell = True, stderr = STDOUT, stdout = PIPE)
+    result = Popen('diff ' + refName + ' '+ testedName+'.test' +' >' + diffName +'.diff ', shell = True, stdout = PIPE)
     print 'Executing test "%s"' % testName
     print ''.join(result.stdout.readlines())
 
-for _, _, files in os.walk(DIFF_DIR):
-  for file in files:
-  	diffName = os.path.join(DIFF_DIR, file)
-  	doneName = os.path.join(DONE_DIR, file)
-  	if( os.stat(diffName)[6]==0):
-  		result = Popen('mv '+diffName+ ' '+doneName, shell = True, stderr = STDOUT, stdout = PIPE)
-  		print "No differences found on %s" % file
+
+for _, dirs, files in os.walk(DIFF_DIR):
+  for dir in dirs:
+    if not dir.endswith('DONE'):
+      #print "Reading from dir:%s"% dir
+      continue
+
+    for file in files:
+      #print "Verificando %s"% file
+      if not (file.endswith('.diff')):
+        continue
+      diffName = os.path.join(DIFF_DIR, file)
+      doneName = os.path.join(DONE_DIR, file)
+      if( os.stat(diffName).st_size == 0):
+        result = Popen('mv '+diffName+ ' '+doneName, shell = True, stderr = STDOUT, stdout = PIPE)
+        print "No differences found on %s" % file
   	

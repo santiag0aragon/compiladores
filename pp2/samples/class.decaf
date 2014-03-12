@@ -9,6 +9,6 @@ class Cow {
 
 void main() {
   Cow betsy;
-  betsy = New(Cow);
+  betsy = New Cow ; // Comentar a marco 
   betsy.Moo();
 }
