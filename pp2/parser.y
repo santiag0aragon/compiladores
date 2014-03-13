@@ -255,8 +255,23 @@ ClassDecl 	:	T_Class T_Identifier Extend Impl '{' Fields '}'
 			|	T_Class T_Identifier Extend Impl '{' '}'
 									{
 										$$ = new ClassDecl(new Identifier(@2, $2), $3, $4, new List<Decl*>);
-									}
+								}
+			;								
 
+			/*						}
+			|	T_Class T_Identifier  Impl '{' '}'
+									{
+										$$ = new ClassDecl(new Identifier(@2, $2), NULL, $3, new List<Decl*>);
+									}
+			|	T_Class T_Identifier Extend  '{' '}'
+									{
+										$$ = new ClassDecl(new Identifier(@2, $2), $3, NULL, new List<Decl*>);
+									}
+			|	T_Class T_Identifier  '{' '}'
+									{
+										$$ = new ClassDecl(new Identifier(@2, $2), NULL, NULL, new List<Decl*>);
+									}	
+									*/
 Extend    	:   T_Extends T_Identifier		
 									{ 
 										$$ = new NamedType(new Identifier(@2, $2)); 
@@ -267,7 +282,7 @@ Extend    	:   T_Extends T_Identifier
 
 Impl      	:   T_Implements Implements 
                                     { $$ = $2; }
-          	|                       {  }
+          	|                       { }
           	;
 
 
@@ -389,11 +404,12 @@ Cases      : Cases Case              { ($$ = $1)->Append($2); }
            | Case                    { ($$ = new List<CaseStmt*>)->Append($1); }
            ;
 
-Case       : T_Case IntConstant ':' Stmts        
-                                     { $$ = new CaseStmt($2, $4); }
-           | T_Case IntConstant ':'  { $$ = new CaseStmt($2, new List<Stmt*>); }
+Case       : T_Case IntConstant ':' Stmts T_Break ';'      
+                                     { $$ = new CaseStmt($2,$4); }
+           | T_Case IntConstant  ':' Stmts { $$ = new CaseStmt($2, $4); }
+           | T_Case IntConstant  ':'  { $$ = new CaseStmt($2, new List<Stmt*>); }
            ;
-           
+
 Default    : T_Default ':' Stmts     { $$ = new DefaultStmt($3); }
            |                         { $$ = NULL; }
            ;
@@ -467,8 +483,8 @@ Exprs      : Exprs ',' Expr          { ($$ = $1)->Append($3); }
            | Expr                    { ($$ = new List<Expr*>)->Append($1); }
            ; 
 
-OptionalExpr    ://                   { $$ = new EmptyExpr(); }
-				Expr				{ $$= $1; }
+OptionalExpr    :                   { $$ = new EmptyExpr(); }
+				| Expr				{ $$= $1; }
            		;
  
             
@@ -540,6 +556,6 @@ NullConstant   : T_Null              { $$ = new NullConstant(@1); }
 void InitParser()
 {
    PrintDebug("parser", "Initializing parser");
-//   yydebug = true;
    yydebug = false;
+   //yydebug = true;
 }

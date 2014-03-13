@@ -54,7 +54,7 @@ void large() {
 	switch(inputvar) {
 
 		case 2:
-		case 4:
+		case 4:///manejar error
 		case 6:
 		case 8:
 		case 10:
