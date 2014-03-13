@@ -1,0 +1,6 @@
+
+*** Error line 33.
+  green = New(Color);
+             ^
+*** syntax error
+

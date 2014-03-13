@@ -1,7 +1,6 @@
-1,6d0
-< 
-< *** Error line 12.
-<   betsy = New(Cow, true);
+4,5c4,5
 <                  ^
 < *** parse error
-< 
+---
+>              ^
+> *** syntax error

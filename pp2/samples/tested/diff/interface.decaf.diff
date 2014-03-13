@@ -1,5 +1,4 @@
-1,133d0
-< 
+2,133c2,6
 <    Program: 
 <   1   InterfaceDecl: 
 <   1      Identifier: Colorable
@@ -132,3 +131,9 @@
 <  36            Identifier: SetColor
 <  36            (actuals) FieldAccess: 
 <  36               Identifier: green
+---
+> *** Error line 33.
+>   green = New(Color);
+>              ^
+> *** syntax error
+> 

@@ -255,40 +255,53 @@ ClassDecl 	:	T_Class T_Identifier Extend Impl '{' Fields '}'
 			|	T_Class T_Identifier Extend Impl '{' '}'
 									{
 										$$ = new ClassDecl(new Identifier(@2, $2), $3, $4, new List<Decl*>);
-								}
-			;								
-
-			/*						}
+								}		
+									
 			|	T_Class T_Identifier  Impl '{' '}'
 									{
 										$$ = new ClassDecl(new Identifier(@2, $2), NULL, $3, new List<Decl*>);
 									}
 			|	T_Class T_Identifier Extend  '{' '}'
 									{
-										$$ = new ClassDecl(new Identifier(@2, $2), $3, NULL, new List<Decl*>);
+										$$ = new ClassDecl(new Identifier(@2, $2), $3, new List<NamedType*>, new List<Decl*>);
 									}
 			|	T_Class T_Identifier  '{' '}'
 									{
-										$$ = new ClassDecl(new Identifier(@2, $2), NULL, NULL, new List<Decl*>);
+										$$ = new ClassDecl(new Identifier(@2, $2), NULL, new List<NamedType*>, new List<Decl*>);
+									}
+			|	T_Class T_Identifier  Impl '{' Fields '}'
+									{
+										$$ = new ClassDecl(new Identifier(@2, $2), NULL, $3, $5);
+									}
+			|	T_Class T_Identifier Extend  '{' Fields '}'
+									{
+										$$ = new ClassDecl(new Identifier(@2, $2), $3, new List<NamedType*>, $5);
+									}
+			|	T_Class T_Identifier  '{' Fields '}'
+									{
+										$$ = new ClassDecl(new Identifier(@2, $2), NULL, new List<NamedType*>,  $4);
 									}	
-									*/
+
+									;
+									
 Extend    	:   T_Extends T_Identifier		
 									{ 
 										$$ = new NamedType(new Identifier(@2, $2)); 
 									}
-			|                       {  }										          	
+			//|						{$$ = NULL;}									
+			;									          	
           	         
           	;
 
 Impl      	:   T_Implements Implements 
                                     { $$ = $2; }
-          	|                       { }
           	;
 
 
 Implements 	:   Implements ',' NamedType 
                                     { ($$ = $1) -> Append($3); }
-           	|	NamedType			{ ($$ = new List<NamedType*>)->Append($1); }         	   
+           	|	NamedType			{ ($$ = new List<NamedType*>)->Append($1); } 
+           	//|        	   			{ $$ = new List<NamedType*> ;}
            	;    
 
 Fields     	:   Fields Field        { ($$ = $1)->Append($2); }
@@ -557,5 +570,5 @@ void InitParser()
 {
    PrintDebug("parser", "Initializing parser");
    yydebug = false;
-   //yydebug = true;
+  // yydebug = true;
 }
