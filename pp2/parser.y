@@ -170,8 +170,8 @@ void yyerror(char *msg); // standard error-handling routine
 %type <assignexpr>     	AssignExpr
 %type <postfixexpr>    	PostfixExpr
 %type <lvalue>        	LValue
-%type <fieldaccess>   	FieldAccess
-%type <arrayaccess>   	ArrayAccess
+//%type <fieldaccess>   	FieldAccess
+//%type <arrayaccess>   	ArrayAccess
 
 
 %nonassoc LOWER_THAN_ELSE
@@ -188,12 +188,7 @@ void yyerror(char *msg); // standard error-handling routine
  
 
 %%
-/* Rules
- * -----
- * All productions and actions should be placed between the start and stop
- * %% markers which delimit the Rules section.
-	 
- */
+/* Rules */
 Program   	:   DeclList            { 
                                       @1; 
                                       /* pp2: The @1 is needed to convince 
@@ -229,7 +224,7 @@ Type     	:   T_Int       		{ $$ = Type::intType; }
           	|   T_Identifier		{ $$ = new NamedType(new Identifier(@1, $1)); }
           	|   Type T_Dims			{ $$ = new ArrayType(@1, $1); }
           	;
-//TODO: quitar
+
 NamedType 	: 	T_Identifier		{ $$ = new NamedType(new Identifier(@1, $1)); }	          	
 			;
 
@@ -287,6 +282,7 @@ Fields     	:   Fields Field        { ($$ = $1)->Append($2); }
 
 Field      	:   VarDecl 			{ }
            	|   FnDecl  			{ }
+           	| 						{ }
            	;
 
 InterfaceDecl 	: 	T_Interface T_Identifier '{' Prototypes '}'
@@ -338,18 +334,19 @@ StmtBlock  	:	'{' VarDecls Stmts '}'
                                         $$ = new StmtBlock(v, s);
                                     }           							
            	;
+
+
+
            
-VarDecls   	: 	VarDecls VarDecl    { ($$ = $1) -> Append($2); }
-           	|                       { $$ = new List<VarDecl*>; }
+VarDecls   	: 	VarDecls VarDecl     { ($$ = $1) -> Append($2); }
+           	| 	VarDecl              { ($$ = new List<VarDecl*>) -> Append($1); }
            	;
 
 Stmts      	: 	Stmts Stmt          { ($$ = $1) -> Append($2); }
            	|	Stmt                { ($$ = new List<Stmt*>) -> Append($1); }
            	;
            
-Stmt       	: 	OptionalExpr ';' 	{ } 
-			//|	Expr ';'			{ }//conflicto
-           	| 	IfStmt 				{ }
+Stmt       	: 	IfStmt 				{ }
            	| 	WhileStmt 			{ }
            	| 	ForStmt 			{ }
            	| 	BreakStmt 			{ }
@@ -357,9 +354,12 @@ Stmt       	: 	OptionalExpr ';' 	{ }
            	| 	SwitchStmt 			{ }
            	| 	PrintStmt 			{ }
            	| 	StmtBlock 			{ }
+           	|  	OptionalExpr  	';'	{ } 
            	;
           
-           
+
+
+
 IfStmt     : 	T_If '(' Expr ')' Stmt  %prec LOWER_THAN_ELSE
                                      { $$ = new IfStmt($3, $5, NULL); }
            | 	T_If '(' Expr ')' Stmt T_Else Stmt
@@ -467,20 +467,20 @@ Exprs      : Exprs ',' Expr          { ($$ = $1)->Append($3); }
            | Expr                    { ($$ = new List<Expr*>)->Append($1); }
            ; 
 
-OptionalExpr    :                   { $$ = new EmptyExpr(); }
-				| Expr				{ $$ = $1 ;}
-				| 					{ }
+OptionalExpr    ://                   { $$ = new EmptyExpr(); }
+				Expr				{ $$= $1; }
            		;
  
             
-LValue     : FieldAccess  			{ }            
-           | ArrayAccess  			{ }
+LValue     : T_Identifier           { $$ = new FieldAccess(NULL, new Identifier(@1, $1)); }
+           | Expr '.' T_Identifier  { $$ = new FieldAccess($1, new Identifier(@3, $3)); }
+           | Expr '[' Expr ']'      { $$ = new ArrayAccess(Join(@1, @4), $1, $3); }
            ; 
 
-FieldAccess : T_Identifier           { $$ = new FieldAccess(NULL, new Identifier(@1, $1)); }
-            | Expr '.' T_Identifier
-                                     { $$ = new FieldAccess($1, new Identifier(@3, $3)); }
-            ;
+//FieldAccess : T_Identifier           { $$ = new FieldAccess(NULL, new Identifier(@1, $1)); }
+//            | Expr '.' T_Identifier
+//                                     { $$ = new FieldAccess($1, new Identifier(@3, $3)); }
+//            ;
 
 Call       : T_Identifier '(' Actuals ')' 
                                      { $$ = new Call(@1, NULL, new Identifier(@1, $1), $3); }  
@@ -488,8 +488,8 @@ Call       : T_Identifier '(' Actuals ')'
                                      { $$ = new Call(Join(@1, @6), $1, new Identifier(@3, $3), $5); }
            ;
 
-ArrayAccess : Expr '[' Expr ']'      { $$ = new ArrayAccess(Join(@1, @4), $1, $3); }
-            ;
+//ArrayAccess : Expr '[' Expr ']'      { $$ = new ArrayAccess(Join(@1, @4), $1, $3); }
+//            ;
            
 Actuals    : Exprs 
            |                         { $$ = new List<Expr*>; }
@@ -540,5 +540,6 @@ NullConstant   : T_Null              { $$ = new NullConstant(@1); }
 void InitParser()
 {
    PrintDebug("parser", "Initializing parser");
+//   yydebug = true;
    yydebug = false;
 }

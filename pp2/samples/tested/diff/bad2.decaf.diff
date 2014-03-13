@@ -1,4 +1,7 @@
-5c5
-< *** parse error
----
-> *** syntax error
+1,6d0
+< 
+< *** Error line 4.
+<   here is some gobbledy gook;
+<           ^^^^
+< *** syntax error
+< 
