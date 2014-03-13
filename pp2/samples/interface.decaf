@@ -30,8 +30,8 @@ void main() {
   Colorable s;
   Color green;
 
-  green = New(Color);
+  green = New Color;
   green.SetRGB(0, 0, 255);
-  s = New(Rectangle);
+  s = New Rectangle;
   s.SetColor(green);
 }

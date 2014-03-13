@@ -9,7 +9,7 @@ class Cow extends Cows {
 
 void main() {
   Cow betsy;
-  betsy = New(Cow, true);
+  betsy = New Cow ,true;
   
   betsy.IsSpottedCow(5, break);
 }

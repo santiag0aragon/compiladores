@@ -1,4 +1,5 @@
-2,683c2,5
+1,683d0
+< 
 <    Program: 
 <   4   ClassDecl: 
 <   4      Identifier: Matrix
@@ -681,9 +682,3 @@
 < 139            FieldAccess: 
 < 139               Identifier: m
 < 139            Identifier: PrintMatrix
----
-> *** Error line 109.
->       elem = New(SparseItem);
->                 ^
-> *** syntax error
-\ No newline at end of file
