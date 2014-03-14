@@ -2225,7 +2225,7 @@ yyreduce:
 
   case 66:
 #line 406 "parser.y"
-    { (yyval.rtnstmt) = new ReturnStmt((yylsp[(2) - (3)]), (yyvsp[(2) - (3)].expr)); }
+    { (yyval.rtnstmt) = new ReturnStmt((yylsp[(1) - (3)]), (yyvsp[(2) - (3)].expr)); }
     break;
 
   case 67:

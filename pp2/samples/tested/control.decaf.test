@@ -94,5 +94,11 @@
  18                     IntConstant: 10
  18                  (then) FieldAccess: 
  18                     Identifier: a
-  0         ReturnStmt: 
+ 20         ReturnStmt: 
                Empty: 
+ 21         AssignExpr: 
+ 21            FieldAccess: 
+ 21               Identifier: a
+ 21            Operator: =
+ 21            FieldAccess: 
+ 21               Identifier: b

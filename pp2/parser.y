@@ -403,7 +403,7 @@ ForStmt    : T_For '(' OptionalExpr ';' Expr ';' OptionalExpr ')' Stmt
                                      { $$ = new ForStmt($3, $5, $7, $9); }
            ;
            
-ReturnStmt : T_Return OptionalExpr ';'    { $$ = new ReturnStmt(@2, $2); }
+ReturnStmt : T_Return OptionalExpr ';'    { $$ = new ReturnStmt(@1, $2); }
            ;
         
 BreakStmt  : T_Break ';'             { $$ = new BreakStmt(@1); }                            
