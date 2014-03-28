@@ -30,7 +30,7 @@ class Cow extends Animal {
 void main() {
   Cow betsy;
   Animal b;
-  betsy = New Cow ;
+  betsy = New (Cow) ;
   
   betsy.InitCow(5, null, true);
   b = betsy;

@@ -3,6 +3,6 @@
 <                  ^
 < *** parse error
 ---
->   betsy = New Cow ,true;
->                   ^
+>   betsy = New (Cow ,true);
+>                    ^
 > *** syntax error

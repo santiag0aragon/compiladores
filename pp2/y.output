@@ -13,7 +13,7 @@ State 60 conflicts: 7 shift/reduce
 State 61 conflicts: 7 shift/reduce
 State 63 conflicts: 7 shift/reduce
 State 75 conflicts: 7 shift/reduce
-State 249 conflicts: 3 reduce/reduce
+State 251 conflicts: 3 reduce/reduce
 
 
 Grammar
@@ -139,7 +139,7 @@ Grammar
    86     | PostfixExpr
    87     | T_ReadInteger '(' ')'
    88     | T_ReadLine '(' ')'
-   89     | T_New T_Identifier
+   89     | T_New '(' T_Identifier ')'
    90     | T_NewArray '(' Expr ',' Type ')'
 
    91 AssignExpr: LValue '=' Expr
@@ -204,8 +204,8 @@ Terminals, with rules where they appear
 $end (0) 0
 '!' (33) 108
 '%' (37) 96
-'(' (40) 16 17 42 43 61 62 63 64 67 75 81 87 88 90 116 117
-')' (41) 16 17 42 43 61 62 63 64 67 75 81 87 88 90 116 117
+'(' (40) 16 17 42 43 61 62 63 64 67 75 81 87 88 89 90 116 117
+')' (41) 16 17 42 43 61 62 63 64 67 75 81 87 88 89 90 116 117
 '*' (42) 94
 '+' (43) 92
 ',' (44) 18 31 90 109
@@ -1400,9 +1400,9 @@ state 87
 
 state 88
 
-   89 Expr: T_New . T_Identifier
+   89 Expr: T_New . '(' T_Identifier ')'
 
-    T_Identifier  shift, and go to state 142
+    '('  shift, and go to state 142
 
 
 state 89
@@ -2149,9 +2149,9 @@ state 141
 
 state 142
 
-   89 Expr: T_New T_Identifier .
+   89 Expr: T_New '(' . T_Identifier ')'
 
-    $default  reduce using rule 89 (Expr)
+    T_Identifier  shift, and go to state 183
 
 
 state 143
@@ -2173,7 +2173,7 @@ state 143
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 183
+    Expr            go to state 184
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2209,14 +2209,14 @@ state 144
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 184
+    Expr            go to state 185
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
     EqualityExpr    go to state 119
     RelationalExpr  go to state 120
     LogicalExpr     go to state 121
-    Exprs           go to state 185
+    Exprs           go to state 186
     LValue          go to state 123
     Call            go to state 124
     Constant        go to state 125
@@ -2231,14 +2231,14 @@ state 145
 
    87 Expr: T_ReadInteger '(' . ')'
 
-    ')'  shift, and go to state 186
+    ')'  shift, and go to state 187
 
 
 state 146
 
    88 Expr: T_ReadLine '(' . ')'
 
-    ')'  shift, and go to state 187
+    ')'  shift, and go to state 188
 
 
 state 147
@@ -2262,17 +2262,17 @@ state 147
 
     $default  reduce using rule 119 (Actuals)
 
-    Expr            go to state 184
+    Expr            go to state 185
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
     EqualityExpr    go to state 119
     RelationalExpr  go to state 120
     LogicalExpr     go to state 121
-    Exprs           go to state 188
+    Exprs           go to state 189
     LValue          go to state 123
     Call            go to state 124
-    Actuals         go to state 189
+    Actuals         go to state 190
     Constant        go to state 125
     IntConstant     go to state 126
     DoubleConstant  go to state 127
@@ -2368,7 +2368,7 @@ state 150
     '%'             shift, and go to state 169
     '['             shift, and go to state 170
     '.'             shift, and go to state 171
-    ')'             shift, and go to state 190
+    ')'             shift, and go to state 191
 
 
 state 151
@@ -2419,7 +2419,7 @@ state 154
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
     '{'               shift, and go to state 69
-    '}'               shift, and go to state 191
+    '}'               shift, and go to state 192
 
     $default  reduce using rule 111 (OptionalExpr)
 
@@ -2483,7 +2483,7 @@ state 157
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 192
+    Expr            go to state 193
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2519,7 +2519,7 @@ state 158
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 193
+    Expr            go to state 194
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2555,7 +2555,7 @@ state 159
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 194
+    Expr            go to state 195
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2591,7 +2591,7 @@ state 160
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 195
+    Expr            go to state 196
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2627,7 +2627,7 @@ state 161
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 196
+    Expr            go to state 197
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2663,7 +2663,7 @@ state 162
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 197
+    Expr            go to state 198
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2699,7 +2699,7 @@ state 163
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 198
+    Expr            go to state 199
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2735,7 +2735,7 @@ state 164
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 199
+    Expr            go to state 200
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2771,7 +2771,7 @@ state 165
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 200
+    Expr            go to state 201
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2807,7 +2807,7 @@ state 166
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 201
+    Expr            go to state 202
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2843,7 +2843,7 @@ state 167
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 202
+    Expr            go to state 203
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2879,7 +2879,7 @@ state 168
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 203
+    Expr            go to state 204
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2915,7 +2915,7 @@ state 169
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 204
+    Expr            go to state 205
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2951,7 +2951,7 @@ state 170
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 205
+    Expr            go to state 206
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -2973,7 +2973,7 @@ state 171
   114 LValue: Expr '.' . T_Identifier
   117 Call: Expr '.' . T_Identifier '(' Actuals ')'
 
-    T_Identifier  shift, and go to state 206
+    T_Identifier  shift, and go to state 207
 
 
 state 172
@@ -3016,7 +3016,7 @@ state 175
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 207
+    Expr            go to state 208
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -3037,14 +3037,14 @@ state 176
 
    43 Prototype: T_Void T_Identifier '(' Variables ')' . ';'
 
-    ';'  shift, and go to state 208
+    ';'  shift, and go to state 209
 
 
 state 177
 
    42 Prototype: Type T_Identifier '(' Variables ')' . ';'
 
-    ';'  shift, and go to state 209
+    ';'  shift, and go to state 210
 
 
 state 178
@@ -3082,14 +3082,14 @@ state 178
     '%'             shift, and go to state 169
     '['             shift, and go to state 170
     '.'             shift, and go to state 171
-    ')'             shift, and go to state 210
+    ')'             shift, and go to state 211
 
 
 state 179
 
    64 ForStmt: T_For '(' OptionalExpr . ';' Expr ';' OptionalExpr ')' Stmt
 
-    ';'  shift, and go to state 211
+    ';'  shift, and go to state 212
 
 
 state 180
@@ -3128,7 +3128,7 @@ state 180
     '%'             shift, and go to state 169
     '['             shift, and go to state 170
     '.'             shift, and go to state 171
-    ')'             shift, and go to state 212
+    ')'             shift, and go to state 213
 
 
 state 181
@@ -3173,10 +3173,17 @@ state 182
     '%'             shift, and go to state 169
     '['             shift, and go to state 170
     '.'             shift, and go to state 171
-    ')'             shift, and go to state 213
+    ')'             shift, and go to state 214
 
 
 state 183
+
+   89 Expr: T_New '(' T_Identifier . ')'
+
+    ')'  shift, and go to state 215
+
+
+state 184
 
    90 Expr: T_NewArray '(' Expr . ',' Type ')'
    92 ArithmeticExpr: Expr . '+' Expr
@@ -3211,10 +3218,10 @@ state 183
     '%'             shift, and go to state 169
     '['             shift, and go to state 170
     '.'             shift, and go to state 171
-    ','             shift, and go to state 214
+    ','             shift, and go to state 216
 
 
-state 184
+state 185
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3253,61 +3260,61 @@ state 184
     $default  reduce using rule 110 (Exprs)
 
 
-state 185
+state 186
 
    75 PrintStmt: T_Print '(' Exprs . ')' ';'
   109 Exprs: Exprs . ',' Expr
 
-    ')'  shift, and go to state 215
-    ','  shift, and go to state 216
+    ')'  shift, and go to state 217
+    ','  shift, and go to state 218
 
 
-state 186
+state 187
 
    87 Expr: T_ReadInteger '(' ')' .
 
     $default  reduce using rule 87 (Expr)
 
 
-state 187
+state 188
 
    88 Expr: T_ReadLine '(' ')' .
 
     $default  reduce using rule 88 (Expr)
 
 
-state 188
+state 189
 
   109 Exprs: Exprs . ',' Expr
   118 Actuals: Exprs .
 
-    ','  shift, and go to state 216
+    ','  shift, and go to state 218
 
     $default  reduce using rule 118 (Actuals)
 
 
-state 189
+state 190
 
   116 Call: T_Identifier '(' Actuals . ')'
 
-    ')'  shift, and go to state 217
+    ')'  shift, and go to state 219
 
 
-state 190
+state 191
 
    81 Expr: '(' Expr ')' .
 
     $default  reduce using rule 81 (Expr)
 
 
-state 191
+state 192
 
    44 StmtBlock: '{' VarDecls Stmts '}' .
 
     $default  reduce using rule 44 (StmtBlock)
 
 
-state 192
+state 193
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3343,7 +3350,7 @@ state 192
     $default  reduce using rule 104 (RelationalExpr)
 
 
-state 193
+state 194
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3379,7 +3386,7 @@ state 193
     $default  reduce using rule 105 (RelationalExpr)
 
 
-state 194
+state 195
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3417,7 +3424,7 @@ state 194
     $default  reduce using rule 100 (EqualityExpr)
 
 
-state 195
+state 196
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3455,7 +3462,7 @@ state 195
     $default  reduce using rule 101 (EqualityExpr)
 
 
-state 196
+state 197
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3492,7 +3499,7 @@ state 196
     $default  reduce using rule 106 (LogicalExpr)
 
 
-state 197
+state 198
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3530,7 +3537,7 @@ state 197
     $default  reduce using rule 107 (LogicalExpr)
 
 
-state 198
+state 199
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3566,7 +3573,7 @@ state 198
     $default  reduce using rule 102 (RelationalExpr)
 
 
-state 199
+state 200
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3602,7 +3609,7 @@ state 199
     $default  reduce using rule 103 (RelationalExpr)
 
 
-state 200
+state 201
 
    92 ArithmeticExpr: Expr . '+' Expr
    92               | Expr '+' Expr .
@@ -3631,7 +3638,7 @@ state 200
     $default  reduce using rule 92 (ArithmeticExpr)
 
 
-state 201
+state 202
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3660,7 +3667,7 @@ state 201
     $default  reduce using rule 93 (ArithmeticExpr)
 
 
-state 202
+state 203
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3686,7 +3693,7 @@ state 202
     $default  reduce using rule 94 (ArithmeticExpr)
 
 
-state 203
+state 204
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3712,7 +3719,7 @@ state 203
     $default  reduce using rule 95 (ArithmeticExpr)
 
 
-state 204
+state 205
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3738,7 +3745,7 @@ state 204
     $default  reduce using rule 96 (ArithmeticExpr)
 
 
-state 205
+state 206
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -3773,20 +3780,20 @@ state 205
     '%'             shift, and go to state 169
     '['             shift, and go to state 170
     '.'             shift, and go to state 171
-    ']'             shift, and go to state 218
+    ']'             shift, and go to state 220
 
 
-state 206
+state 207
 
   114 LValue: Expr '.' T_Identifier .
   117 Call: Expr '.' T_Identifier . '(' Actuals ')'
 
-    '('  shift, and go to state 219
+    '('  shift, and go to state 221
 
     $default  reduce using rule 114 (LValue)
 
 
-state 207
+state 208
 
    91 AssignExpr: LValue '=' Expr .
    92 ArithmeticExpr: Expr . '+' Expr
@@ -3825,116 +3832,23 @@ state 207
     $default  reduce using rule 91 (AssignExpr)
 
 
-state 208
+state 209
 
    43 Prototype: T_Void T_Identifier '(' Variables ')' ';' .
 
     $default  reduce using rule 43 (Prototype)
 
 
-state 209
+state 210
 
    42 Prototype: Type T_Identifier '(' Variables ')' ';' .
 
     $default  reduce using rule 42 (Prototype)
 
 
-state 210
-
-   63 WhileStmt: T_While '(' Expr ')' . Stmt
-
-    T_Null            shift, and go to state 80
-    T_This            shift, and go to state 81
-    T_While           shift, and go to state 82
-    T_For             shift, and go to state 83
-    T_If              shift, and go to state 84
-    T_Return          shift, and go to state 85
-    T_Break           shift, and go to state 86
-    T_Switch          shift, and go to state 87
-    T_New             shift, and go to state 88
-    T_NewArray        shift, and go to state 89
-    T_Print           shift, and go to state 90
-    T_ReadInteger     shift, and go to state 91
-    T_ReadLine        shift, and go to state 92
-    T_Identifier      shift, and go to state 138
-    T_StringConstant  shift, and go to state 94
-    T_IntConstant     shift, and go to state 95
-    T_DoubleConstant  shift, and go to state 96
-    T_BoolConstant    shift, and go to state 97
-    '-'               shift, and go to state 98
-    '!'               shift, and go to state 99
-    '('               shift, and go to state 100
-    '{'               shift, and go to state 69
-
-    $default  reduce using rule 111 (OptionalExpr)
-
-    StmtBlock       go to state 104
-    Stmt            go to state 220
-    IfStmt          go to state 108
-    WhileStmt       go to state 109
-    ForStmt         go to state 110
-    ReturnStmt      go to state 111
-    BreakStmt       go to state 112
-    SwitchStmt      go to state 113
-    PrintStmt       go to state 114
-    Expr            go to state 115
-    AssignExpr      go to state 116
-    ArithmeticExpr  go to state 117
-    PostfixExpr     go to state 118
-    EqualityExpr    go to state 119
-    RelationalExpr  go to state 120
-    LogicalExpr     go to state 121
-    OptionalExpr    go to state 122
-    LValue          go to state 123
-    Call            go to state 124
-    Constant        go to state 125
-    IntConstant     go to state 126
-    DoubleConstant  go to state 127
-    BoolConstant    go to state 128
-    StringConstant  go to state 129
-    NullConstant    go to state 130
-
-
 state 211
 
-   64 ForStmt: T_For '(' OptionalExpr ';' . Expr ';' OptionalExpr ')' Stmt
-
-    T_Null            shift, and go to state 80
-    T_This            shift, and go to state 81
-    T_New             shift, and go to state 88
-    T_NewArray        shift, and go to state 89
-    T_ReadInteger     shift, and go to state 91
-    T_ReadLine        shift, and go to state 92
-    T_Identifier      shift, and go to state 138
-    T_StringConstant  shift, and go to state 94
-    T_IntConstant     shift, and go to state 95
-    T_DoubleConstant  shift, and go to state 96
-    T_BoolConstant    shift, and go to state 97
-    '-'               shift, and go to state 98
-    '!'               shift, and go to state 99
-    '('               shift, and go to state 100
-
-    Expr            go to state 221
-    AssignExpr      go to state 116
-    ArithmeticExpr  go to state 117
-    PostfixExpr     go to state 118
-    EqualityExpr    go to state 119
-    RelationalExpr  go to state 120
-    LogicalExpr     go to state 121
-    LValue          go to state 123
-    Call            go to state 124
-    Constant        go to state 125
-    IntConstant     go to state 126
-    DoubleConstant  go to state 127
-    BoolConstant    go to state 128
-    StringConstant  go to state 129
-    NullConstant    go to state 130
-
-
-state 212
-
-   61 IfStmt: T_If '(' Expr ')' . Stmt
-   62       | T_If '(' Expr ')' . Stmt T_Else Stmt
+   63 WhileStmt: T_While '(' Expr ')' . Stmt
 
     T_Null            shift, and go to state 80
     T_This            shift, and go to state 81
@@ -3988,14 +3902,114 @@ state 212
     NullConstant    go to state 130
 
 
+state 212
+
+   64 ForStmt: T_For '(' OptionalExpr ';' . Expr ';' OptionalExpr ')' Stmt
+
+    T_Null            shift, and go to state 80
+    T_This            shift, and go to state 81
+    T_New             shift, and go to state 88
+    T_NewArray        shift, and go to state 89
+    T_ReadInteger     shift, and go to state 91
+    T_ReadLine        shift, and go to state 92
+    T_Identifier      shift, and go to state 138
+    T_StringConstant  shift, and go to state 94
+    T_IntConstant     shift, and go to state 95
+    T_DoubleConstant  shift, and go to state 96
+    T_BoolConstant    shift, and go to state 97
+    '-'               shift, and go to state 98
+    '!'               shift, and go to state 99
+    '('               shift, and go to state 100
+
+    Expr            go to state 223
+    AssignExpr      go to state 116
+    ArithmeticExpr  go to state 117
+    PostfixExpr     go to state 118
+    EqualityExpr    go to state 119
+    RelationalExpr  go to state 120
+    LogicalExpr     go to state 121
+    LValue          go to state 123
+    Call            go to state 124
+    Constant        go to state 125
+    IntConstant     go to state 126
+    DoubleConstant  go to state 127
+    BoolConstant    go to state 128
+    StringConstant  go to state 129
+    NullConstant    go to state 130
+
+
 state 213
 
-   67 SwitchStmt: T_Switch '(' Expr ')' . '{' Cases Default '}'
+   61 IfStmt: T_If '(' Expr ')' . Stmt
+   62       | T_If '(' Expr ')' . Stmt T_Else Stmt
 
-    '{'  shift, and go to state 223
+    T_Null            shift, and go to state 80
+    T_This            shift, and go to state 81
+    T_While           shift, and go to state 82
+    T_For             shift, and go to state 83
+    T_If              shift, and go to state 84
+    T_Return          shift, and go to state 85
+    T_Break           shift, and go to state 86
+    T_Switch          shift, and go to state 87
+    T_New             shift, and go to state 88
+    T_NewArray        shift, and go to state 89
+    T_Print           shift, and go to state 90
+    T_ReadInteger     shift, and go to state 91
+    T_ReadLine        shift, and go to state 92
+    T_Identifier      shift, and go to state 138
+    T_StringConstant  shift, and go to state 94
+    T_IntConstant     shift, and go to state 95
+    T_DoubleConstant  shift, and go to state 96
+    T_BoolConstant    shift, and go to state 97
+    '-'               shift, and go to state 98
+    '!'               shift, and go to state 99
+    '('               shift, and go to state 100
+    '{'               shift, and go to state 69
+
+    $default  reduce using rule 111 (OptionalExpr)
+
+    StmtBlock       go to state 104
+    Stmt            go to state 224
+    IfStmt          go to state 108
+    WhileStmt       go to state 109
+    ForStmt         go to state 110
+    ReturnStmt      go to state 111
+    BreakStmt       go to state 112
+    SwitchStmt      go to state 113
+    PrintStmt       go to state 114
+    Expr            go to state 115
+    AssignExpr      go to state 116
+    ArithmeticExpr  go to state 117
+    PostfixExpr     go to state 118
+    EqualityExpr    go to state 119
+    RelationalExpr  go to state 120
+    LogicalExpr     go to state 121
+    OptionalExpr    go to state 122
+    LValue          go to state 123
+    Call            go to state 124
+    Constant        go to state 125
+    IntConstant     go to state 126
+    DoubleConstant  go to state 127
+    BoolConstant    go to state 128
+    StringConstant  go to state 129
+    NullConstant    go to state 130
 
 
 state 214
+
+   67 SwitchStmt: T_Switch '(' Expr ')' . '{' Cases Default '}'
+
+    '{'  shift, and go to state 225
+
+
+state 215
+
+   89 Expr: T_New '(' T_Identifier ')' .
+
+    $default  reduce using rule 89 (Expr)
+
+
+state 216
 
    90 Expr: T_NewArray '(' Expr ',' . Type ')'
 
@@ -4005,17 +4019,17 @@ state 214
     T_String      shift, and go to state 5
     T_Identifier  shift, and go to state 8
 
-    Type  go to state 224
+    Type  go to state 226
 
 
-state 215
+state 217
 
    75 PrintStmt: T_Print '(' Exprs ')' . ';'
 
-    ';'  shift, and go to state 225
+    ';'  shift, and go to state 227
 
 
-state 216
+state 218
 
   109 Exprs: Exprs ',' . Expr
 
@@ -4034,7 +4048,7 @@ state 216
     '!'               shift, and go to state 99
     '('               shift, and go to state 100
 
-    Expr            go to state 226
+    Expr            go to state 228
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
@@ -4051,21 +4065,21 @@ state 216
     NullConstant    go to state 130
 
 
-state 217
+state 219
 
   116 Call: T_Identifier '(' Actuals ')' .
 
     $default  reduce using rule 116 (Call)
 
 
-state 218
+state 220
 
   115 LValue: Expr '[' Expr ']' .
 
     $default  reduce using rule 115 (LValue)
 
 
-state 219
+state 221
 
   117 Call: Expr '.' T_Identifier '(' . Actuals ')'
 
@@ -4086,17 +4100,17 @@ state 219
 
     $default  reduce using rule 119 (Actuals)
 
-    Expr            go to state 184
+    Expr            go to state 185
     AssignExpr      go to state 116
     ArithmeticExpr  go to state 117
     PostfixExpr     go to state 118
     EqualityExpr    go to state 119
     RelationalExpr  go to state 120
     LogicalExpr     go to state 121
-    Exprs           go to state 188
+    Exprs           go to state 189
     LValue          go to state 123
     Call            go to state 124
-    Actuals         go to state 227
+    Actuals         go to state 229
     Constant        go to state 125
     IntConstant     go to state 126
     DoubleConstant  go to state 127
@@ -4105,14 +4119,14 @@ state 219
     NullConstant    go to state 130
 
 
-state 220
+state 222
 
    63 WhileStmt: T_While '(' Expr ')' Stmt .
 
     $default  reduce using rule 63 (WhileStmt)
 
 
-state 221
+state 223
 
    64 ForStmt: T_For '(' OptionalExpr ';' Expr . ';' OptionalExpr ')' Stmt
    92 ArithmeticExpr: Expr . '+' Expr
@@ -4147,46 +4161,46 @@ state 221
     '%'             shift, and go to state 169
     '['             shift, and go to state 170
     '.'             shift, and go to state 171
-    ';'             shift, and go to state 228
+    ';'             shift, and go to state 230
 
 
-state 222
+state 224
 
    61 IfStmt: T_If '(' Expr ')' Stmt .
    62       | T_If '(' Expr ')' Stmt . T_Else Stmt
 
-    T_Else  shift, and go to state 229
+    T_Else  shift, and go to state 231
 
     $default  reduce using rule 61 (IfStmt)
 
 
-state 223
+state 225
 
    67 SwitchStmt: T_Switch '(' Expr ')' '{' . Cases Default '}'
 
-    T_Case  shift, and go to state 230
+    T_Case  shift, and go to state 232
 
-    Cases  go to state 231
-    Case   go to state 232
+    Cases  go to state 233
+    Case   go to state 234
 
 
-state 224
+state 226
 
    14 Type: Type . T_Dims
    90 Expr: T_NewArray '(' Expr ',' Type . ')'
 
     T_Dims  shift, and go to state 22
-    ')'     shift, and go to state 233
+    ')'     shift, and go to state 235
 
 
-state 225
+state 227
 
    75 PrintStmt: T_Print '(' Exprs ')' ';' .
 
     $default  reduce using rule 75 (PrintStmt)
 
 
-state 226
+state 228
 
    92 ArithmeticExpr: Expr . '+' Expr
    93               | Expr . '-' Expr
@@ -4225,14 +4239,14 @@ state 226
     $default  reduce using rule 109 (Exprs)
 
 
-state 227
+state 229
 
   117 Call: Expr '.' T_Identifier '(' Actuals . ')'
 
-    ')'  shift, and go to state 234
+    ')'  shift, and go to state 236
 
 
-state 228
+state 230
 
    64 ForStmt: T_For '(' OptionalExpr ';' Expr ';' . OptionalExpr ')' Stmt
 
@@ -4260,7 +4274,7 @@ state 228
     EqualityExpr    go to state 119
     RelationalExpr  go to state 120
     LogicalExpr     go to state 121
-    OptionalExpr    go to state 235
+    OptionalExpr    go to state 237
     LValue          go to state 123
     Call            go to state 124
     Constant        go to state 125
@@ -4271,7 +4285,7 @@ state 228
     NullConstant    go to state 130
 
 
-state 229
+state 231
 
    62 IfStmt: T_If '(' Expr ')' Stmt T_Else . Stmt
 
@@ -4301,7 +4315,7 @@ state 229
     $default  reduce using rule 111 (OptionalExpr)
 
     StmtBlock       go to state 104
-    Stmt            go to state 236
+    Stmt            go to state 238
     IfStmt          go to state 108
     WhileStmt       go to state 109
     ForStmt         go to state 110
@@ -4327,7 +4341,7 @@ state 229
     NullConstant    go to state 130
 
 
-state 230
+state 232
 
    70 Case: T_Case . IntConstant ':' Stmts T_Break ';'
    71     | T_Case . IntConstant ':' Stmts
@@ -4335,89 +4349,89 @@ state 230
 
     T_IntConstant  shift, and go to state 95
 
-    IntConstant  go to state 237
+    IntConstant  go to state 239
 
 
-state 231
+state 233
 
    67 SwitchStmt: T_Switch '(' Expr ')' '{' Cases . Default '}'
    68 Cases: Cases . Case
 
-    T_Case     shift, and go to state 230
-    T_Default  shift, and go to state 238
+    T_Case     shift, and go to state 232
+    T_Default  shift, and go to state 240
 
     $default  reduce using rule 74 (Default)
 
-    Case     go to state 239
-    Default  go to state 240
+    Case     go to state 241
+    Default  go to state 242
 
 
-state 232
+state 234
 
    69 Cases: Case .
 
     $default  reduce using rule 69 (Cases)
 
 
-state 233
+state 235
 
    90 Expr: T_NewArray '(' Expr ',' Type ')' .
 
     $default  reduce using rule 90 (Expr)
 
 
-state 234
+state 236
 
   117 Call: Expr '.' T_Identifier '(' Actuals ')' .
 
     $default  reduce using rule 117 (Call)
 
 
-state 235
+state 237
 
    64 ForStmt: T_For '(' OptionalExpr ';' Expr ';' OptionalExpr . ')' Stmt
 
-    ')'  shift, and go to state 241
+    ')'  shift, and go to state 243
 
 
-state 236
+state 238
 
    62 IfStmt: T_If '(' Expr ')' Stmt T_Else Stmt .
 
     $default  reduce using rule 62 (IfStmt)
 
 
-state 237
+state 239
 
    70 Case: T_Case IntConstant . ':' Stmts T_Break ';'
    71     | T_Case IntConstant . ':' Stmts
    72     | T_Case IntConstant . ':'
 
-    ':'  shift, and go to state 242
+    ':'  shift, and go to state 244
 
 
-state 238
+state 240
 
    73 Default: T_Default . ':' Stmts
 
-    ':'  shift, and go to state 243
+    ':'  shift, and go to state 245
 
 
-state 239
+state 241
 
    68 Cases: Cases Case .
 
     $default  reduce using rule 68 (Cases)
 
 
-state 240
+state 242
 
    67 SwitchStmt: T_Switch '(' Expr ')' '{' Cases Default . '}'
 
-    '}'  shift, and go to state 244
+    '}'  shift, and go to state 246
 
 
-state 241
+state 243
 
    64 ForStmt: T_For '(' OptionalExpr ';' Expr ';' OptionalExpr ')' . Stmt
 
@@ -4447,7 +4461,7 @@ state 241
     $default  reduce using rule 111 (OptionalExpr)
 
     StmtBlock       go to state 104
-    Stmt            go to state 245
+    Stmt            go to state 247
     IfStmt          go to state 108
     WhileStmt       go to state 109
     ForStmt         go to state 110
@@ -4473,7 +4487,7 @@ state 241
     NullConstant    go to state 130
 
 
-state 242
+state 244
 
    70 Case: T_Case IntConstant ':' . Stmts T_Break ';'
    71     | T_Case IntConstant ':' . Stmts
@@ -4506,7 +4520,7 @@ state 242
     $default  reduce using rule 72 (Case)
 
     StmtBlock       go to state 104
-    Stmts           go to state 246
+    Stmts           go to state 248
     Stmt            go to state 107
     IfStmt          go to state 108
     WhileStmt       go to state 109
@@ -4533,7 +4547,7 @@ state 242
     NullConstant    go to state 130
 
 
-state 243
+state 245
 
    73 Default: T_Default ':' . Stmts
 
@@ -4563,7 +4577,7 @@ state 243
     $default  reduce using rule 111 (OptionalExpr)
 
     StmtBlock       go to state 104
-    Stmts           go to state 247
+    Stmts           go to state 249
     Stmt            go to state 107
     IfStmt          go to state 108
     WhileStmt       go to state 109
@@ -4590,21 +4604,21 @@ state 243
     NullConstant    go to state 130
 
 
-state 244
+state 246
 
    67 SwitchStmt: T_Switch '(' Expr ')' '{' Cases Default '}' .
 
     $default  reduce using rule 67 (SwitchStmt)
 
 
-state 245
+state 247
 
    64 ForStmt: T_For '(' OptionalExpr ';' Expr ';' OptionalExpr ')' Stmt .
 
     $default  reduce using rule 64 (ForStmt)
 
 
-state 246
+state 248
 
    50 Stmts: Stmts . Stmt
    70 Case: T_Case IntConstant ':' Stmts . T_Break ';'
@@ -4616,7 +4630,7 @@ state 246
     T_For             shift, and go to state 83
     T_If              shift, and go to state 84
     T_Return          shift, and go to state 85
-    T_Break           shift, and go to state 248
+    T_Break           shift, and go to state 250
     T_Switch          shift, and go to state 87
     T_New             shift, and go to state 88
     T_NewArray        shift, and go to state 89
@@ -4663,7 +4677,7 @@ state 246
     NullConstant    go to state 130
 
 
-state 247
+state 249
 
    50 Stmts: Stmts . Stmt
    73 Default: T_Default ':' Stmts .
@@ -4721,15 +4735,15 @@ state 247
     NullConstant    go to state 130
 
 
-state 248
+state 250
 
    66 BreakStmt: T_Break . ';'
    70 Case: T_Case IntConstant ':' Stmts T_Break . ';'
 
-    ';'  shift, and go to state 249
+    ';'  shift, and go to state 251
 
 
-state 249
+state 251
 
    66 BreakStmt: T_Break ';' .
    70 Case: T_Case IntConstant ':' Stmts T_Break ';' .

@@ -444,7 +444,7 @@ Expr       :  AssignExpr 			{ }
            |  PostfixExpr 			{ }
     	   |  T_ReadInteger '(' ')'  { $$ = new ReadIntegerExpr(@1); }
            |  T_ReadLine '(' ')'     { $$ = new ReadLineExpr(@1); }
-           |  T_New T_Identifier     { $$ = new NewExpr(Join(@1, @2), new NamedType(new Identifier(@2, $2))); }
+           |  T_New '('T_Identifier')'     { $$ = new NewExpr(Join(@1, @3), new NamedType(new Identifier(@3, $3))); }
            |  T_NewArray '(' Expr ',' Type ')'
                                      { 
                                      	$$ = new NewArrayExpr(Join(@1, @6), $3, $5); 
@@ -525,7 +525,7 @@ Actuals    : Exprs
            ;
            
 Constant   : IntConstant           	{ }
-           | DoubleConstant 		{ }
+           | DoubleConstant 		    { }
            | BoolConstant 			{ }
            | StringConstant 		{ }
            | NullConstant 			{ }

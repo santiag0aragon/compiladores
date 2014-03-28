@@ -89,6 +89,9 @@ clean:
 	rm -f $(JUNK) y.output $(PRODUCTS)
 
 test:
+	mkdir ./samples/tested &
+	mkdir ./samples/tested/diff &
+	mkdir ./samples/tested/diff/DONE &
 	rm -r ./samples/tested/diff/*.diff &
 	rm -r ./samples/tested/diff/DONE/*.diff &
 	rm -r ./samples/tested/*.test &
