@@ -31,8 +31,8 @@ class Decl : public Node
     Decl(Identifier *name);
     Identifier *GetID() { return id; }
     friend std::ostream& operator<<(std::ostream& out, Decl *d) { return out << d->id; }
-  virtual const char *GetTypeName() { return NULL; }
-  virtual Type *GetType() { return NULL; }
+    virtual const char *GetTypeName() { return NULL; }
+    virtual Type *GetType() { return NULL; }
 };
 
 class VarDecl : public Decl 
@@ -42,10 +42,12 @@ class VarDecl : public Decl
     
   public:
     VarDecl(Identifier *name, Type *type);
-  Type *GetType() { return type; }
-  const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
-  bool HasSameTypeSig(VarDecl *vd);
-  void Check();
+    Type *GetType() { return type; }
+    const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
+    bool HasSameTypeSig(VarDecl *vd);
+    void Check();
+    const char *GetPrintNameForNode() { return "VarDecl"; }
+    void PrintChildren(int indentLevel);
 };
 
 class ClassDecl : public Decl 
@@ -64,6 +66,9 @@ class ClassDecl : public Decl
   void Check();
   bool IsCompatibleWith(Decl *decl);
   Hashtable<Decl*>* GetScopeTable() { return scope_table; }
+  const char *GetPrintNameForNode() { return "ClassDecl"; }
+  void PrintChildren(int indentLevel);
+
 };
 
 class InterfaceDecl : public Decl 
@@ -78,6 +83,8 @@ class InterfaceDecl : public Decl
     List<Decl*> *GetMembers() { return members; }
     Hashtable<Decl*>* GetScopeTable() { return scope_table; }
     void Check();
+    const char *GetPrintNameForNode() { return "InterfaceDecl"; }
+    void PrintChildren(int indentLevel);    
 };
 
 class FnDecl : public Decl 
@@ -97,7 +104,8 @@ class FnDecl : public Decl
   List<VarDecl*> *GetFormals() { return formals; }
   const char *GetTypeName() { if (returnType) return returnType->GetTypeName(); else return NULL; }
   bool HasSameTypeSig(FnDecl *fd);
-  Hashtable<Decl*>* GetSymTable() { return scope_table; }
+  Hashtable<Decl*>* GetSymTable() { return scope_table; }   const char *GetPrintNameForNode() { return "FnDecl"; }
+  void PrintChildren(int indentLevel); 
 };
 
 #endif

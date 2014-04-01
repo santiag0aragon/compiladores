@@ -197,23 +197,7 @@ void ReturnStmt::Check() {
   else if (strcmp("void", expected))
     ReportError::ReturnMismatch(this, new Type("void"), new Type(expected));
 }
-PrintStmt::PrintStmt(List<Expr*> *a) {    
-    Assert(a != NULL);
-    (args=a)->SetParentAll(this);
-}
-void PrintStmt::Check() {
-  if (this->args)
-    {
-      for (int i = 0; i < this->args->NumElements(); i++)
-        {
-          Expr *expr = this->args->Nth(i);
-          expr->Check();
-          const char *typeName = expr->GetTypeName();
-          if (typeName && strcmp(typeName, "string") && strcmp(typeName, "int") && strcmp(typeName, "bool"))
-            ReportError::PrintArgMismatch(expr, (i+1), new Type(typeName));
-        }
-    }
-}
+
 
 CaseStmt::CaseStmt(IntConstant *ic, List<Stmt*> *sts)
   : DefaultStmt(sts) {
@@ -227,6 +211,7 @@ DefaultStmt::DefaultStmt(List<Stmt*> *sts) {
 void DefaultStmt::PrintChildren(int indentLevel) {
     if (stmts) stmts->PrintAll(indentLevel+1);
 }
+
 
 void DefaultStmt::Check() {
   if (this->stmts)//stmt
@@ -261,6 +246,7 @@ void SwitchStmt::PrintChildren(int indentLevel) {
     cases->PrintAll(indentLevel+1);
     if (defaults) defaults->Print(indentLevel+1);
 }
+
 void SwitchStmt::Check() {
   if (this->expr)//Stmt
     this->expr->Check();
@@ -321,11 +307,18 @@ PrintStmt::PrintStmt(List<Expr*> *a) {
 void PrintStmt::PrintChildren(int indentLevel) {
     args->PrintAll(indentLevel+1, "(args) ");
 }
-void SwitchStmt::PrintChildren(int indentLevel) {
-    expr->Print(indentLevel+1);
-    cases->PrintAll(indentLevel+1);
-    if (defaults) defaults->Print(indentLevel+1);
+
+void PrintStmt::Check() {
+  if (this->args)
+    {
+      for (int i = 0; i < this->args->NumElements(); i++)
+        {
+          Expr *expr = this->args->Nth(i);
+          expr->Check();
+          const char *typeName = expr->GetTypeName();
+          if (typeName && strcmp(typeName, "string") && strcmp(typeName, "int") && strcmp(typeName, "bool"))
+            ReportError::PrintArgMismatch(expr, (i+1), new Type(typeName));
+        }
+    }
 }
-void DefaultStmt::PrintChildren(int indentLevel) {
-    if (stmts) stmts->PrintAll(indentLevel+1);
-}
+

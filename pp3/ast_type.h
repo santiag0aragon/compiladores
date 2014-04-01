@@ -28,11 +28,11 @@ class Type : public Node
 
     Type(yyltype loc) : Node(loc) {}
     Type(const char *str);
-    
+    const char *GetPrintNameForNode() { return "Type"; }
+    void PrintChildren(int indentLevel);
     virtual void PrintToStream(std::ostream& out) { out << typeName; }
     virtual Type *GetElemType() { return this; }
     virtual const char *GetTypeName() { return typeName; }
-
     virtual void CheckTypeError() {}
     friend std::ostream& operator<<(std::ostream& out, Type *t) { t->PrintToStream(out); return out; }
     virtual bool IsEquivalentTo(Type *other) { return this == other; }
@@ -50,8 +50,9 @@ class NamedType : public Type
     const char *GetTypeName() { if (id) return id->GetName(); else return NULL; };
     void CheckTypeError();
     bool IsEquivalentTo(Type *nt);
-    
     void PrintToStream(std::ostream& out) { out << id; }
+    const char *GetPrintNameForNode() { return "NamedType"; }
+    void PrintChildren(int indentLevel);
 };
 
 class ArrayType : public Type 
@@ -65,8 +66,9 @@ class ArrayType : public Type
     const char *GetTypeName();
     void CheckTypeError();
     bool IsEquivalentTo(Type *at);
-    
     void PrintToStream(std::ostream& out) { out << elemType << "[]"; }
+    const char *GetPrintNameForNode() { return "ArrayType"; }
+    void PrintChildren(int indentLevel);
 };
 
  

@@ -55,7 +55,7 @@ class Node
     Node *GetParent()        { return parent; }
     virtual void Check(){}
     virtual Hashtable<Decl*>* GetScopeTable() {return NULL;}
-    void Print(int indentLevel, const char *label);
+    void Print(int indentLevel, const char *label=NULL);
 
     virtual const char *GetPrintNameForNode() = 0;
     // Print() is deliberately _not_ virtual

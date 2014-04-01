@@ -27,6 +27,10 @@ bool VarDecl::HasSameTypeSig(VarDecl *vd) {
   else 
     return false;
 }
+void VarDecl::PrintChildren(int indentLevel) { 
+   if (type) type->Print(indentLevel+1);
+   if (id) id->Print(indentLevel+1);
+}
 
 
 
@@ -175,7 +179,12 @@ void ClassDecl::Check() {
     }
 }
 
-
+void ClassDecl::PrintChildren(int indentLevel) {
+    id->Print(indentLevel+1);
+    if (extends) extends->Print(indentLevel+1, "(extends) ");
+    implements->PrintAll(indentLevel+1, "(implements) ");
+    members->PrintAll(indentLevel+1);
+}
 bool ClassDecl::IsCompatibleWith(Decl *decl)
 {
   NamedType *extends = this->GetExtends();
@@ -290,6 +299,7 @@ bool FnDecl::HasSameTypeSig(FnDecl *fd) {
 	      return true;
 	    }
       }
+      return false;
   }
 
 void FnDecl::Check() {
@@ -321,6 +331,13 @@ void FnDecl::Check() {
 
 
 
+}
+
+void FnDecl::PrintChildren(int indentLevel) {
+    if (returnType) returnType->Print(indentLevel+1, "(return type) ");
+    if (id) id->Print(indentLevel+1);
+    if (formals) formals->PrintAll(indentLevel+1, "(formals) ");
+    if (body) body->Print(indentLevel+1, "(body) ");
 }
 
 void FnDecl::SetFunctionBody(StmtBlock *b) { 
