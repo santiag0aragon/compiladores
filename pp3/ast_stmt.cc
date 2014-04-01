@@ -38,7 +38,7 @@ void Program::Check() {
 	      if ((prev = Program::global_table->Lookup(name)) != NULL)
 		ReportError::DeclConflict(cur, prev);
 	      else
-		scope_table->Enter(name, cur);
+		global_table->Enter(name, cur);
 	    }
 	}
       for (int i = 0; i < this->decls->NumElements(); i++)
@@ -227,6 +227,7 @@ DefaultStmt::DefaultStmt(List<Stmt*> *sts) {
 void DefaultStmt::PrintChildren(int indentLevel) {
     if (stmts) stmts->PrintAll(indentLevel+1);
 }
+
 void DefaultStmt::Check() {
   if (this->stmts)//stmt
     {

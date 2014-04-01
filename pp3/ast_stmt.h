@@ -122,6 +122,7 @@ class PrintStmt : public Stmt
     
   public:
     PrintStmt(List<Expr*> *arguments);
+    void Check();
 
 };
 
@@ -133,6 +134,7 @@ class DefaultStmt : public Stmt
   public:
     DefaultStmt(List<Stmt*> *sts);
     void Check();
+    void PrintChildren(int indentLevel);
 
 };
 
@@ -156,6 +158,7 @@ class SwitchStmt : public Stmt
   public:
     SwitchStmt(Expr *e, List<CaseStmt*> *cs, DefaultStmt *ds);
     void Check();
+    void PrintChildren(int indentLevel) ;
 
 };
 
