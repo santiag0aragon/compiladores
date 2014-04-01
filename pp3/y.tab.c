@@ -2795,6 +2795,7 @@ yyreturn:
  * Please be sure the variable is set to false when submitting your final
  * version.
  */
+
 void InitParser()
 {
    PrintDebug("parser", "Initializing parser");

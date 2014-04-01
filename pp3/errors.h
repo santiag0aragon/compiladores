@@ -13,7 +13,6 @@
 #define _H_errors
 
 #include <string>
-using std::string;
 #include "location.h"
 class Type;
 class Identifier;
@@ -56,6 +55,7 @@ class ReportError
 
 
   // Errors used by scanner
+
   static void LongIdentifier(yyltype *loc, const char *ident);
   static void UntermString(yyltype *loc, const char *str);
   static void UnrecogChar(yyltype *loc, char ch);

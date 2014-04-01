@@ -46,9 +46,10 @@ class StmtBlock : public Stmt
     List<VarDecl*> *decls;
     List<Stmt*> *stmts;
     Hashtable<Decl*> *scope_table; 
-    void Check();
   public:
     StmtBlock(List<VarDecl*> *variableDeclarations, List<Stmt*> *statements);
+    void Check();
+    Hashtable<Decl*> *GetScopeTable() { return scope_table; }
 };
 
   
@@ -94,7 +95,7 @@ class IfStmt : public ConditionalStmt
   
   public:
     IfStmt(Expr *test, Stmt *thenBody, Stmt *elseBody);
-    void Check():
+    void Check();
 };
 
 class BreakStmt : public Stmt 
@@ -122,7 +123,7 @@ class PrintStmt : public Stmt
   public:
     PrintStmt(List<Expr*> *arguments);
 
-
+};
 
 class DefaultStmt : public Stmt
 {

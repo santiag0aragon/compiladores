@@ -23,6 +23,8 @@ class Type; // for NewArray
 
 class Expr : public Stmt 
 {
+  protected:
+    Type *type;
   public:
     Expr(yyltype loc) : Stmt(loc) {}
     Expr() : Stmt() {}
@@ -138,6 +140,7 @@ class LValue : public Expr
 {
   public:
     LValue(yyltype loc) : Expr(loc) {}
+
 };
 
 class This : public Expr 
@@ -165,9 +168,14 @@ class FieldAccess : public LValue
   protected:
     Expr *base;	// will be NULL if no explicit base
     Identifier *field;
+    Type *type; // Expr::type is protected and thus not inherited here
     
   public:
     FieldAccess(Expr *base, Identifier *field); //ok to pass NULL base
+    void Check(); // its type is decided here
+    Identifier *GetField() { return field; }
+    Type *GetType() { return type; }
+    const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
 };
 
 /* Like field access, call is used both for qualified base.field()
@@ -183,6 +191,10 @@ class Call : public Expr
     
   public:
     Call(yyltype loc, Expr *base, Identifier *field, List<Expr*> *args);
+    void CheckArguments(FnDecl *fndecl); // check arguments against formal parameters
+    void Check(); // its type is decided here
+    Type* GetType() { return type; }
+    const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
 };
 
 class NewExpr : public Expr
@@ -192,6 +204,9 @@ class NewExpr : public Expr
     
   public:
     NewExpr(yyltype loc, NamedType *clsType);
+    void Check();
+    Type *GetType() { return cType; }
+    const char *GetTypeName() { if (cType) return cType->GetTypeName(); else return NULL;  }
 };
 
 class NewArrayExpr : public Expr
@@ -202,6 +217,8 @@ class NewArrayExpr : public Expr
     
   public:
     NewArrayExpr(yyltype loc, Expr *sizeExpr, Type *elemType);
+    void Check();
+    const char *GetTypeName();
 };
 
 class ReadIntegerExpr : public Expr
@@ -224,6 +241,7 @@ class PostfixExpr : public Expr
 
   public:
     PostfixExpr(yyltype loc, LValue *lv, Operator *op);
+    void Check();
     Type *GetType() { if (lvalue) return lvalue->GetType(); else return NULL; }
     const char *GetTypeName() { if (lvalue) return lvalue->GetTypeName(); else return NULL; }
 };

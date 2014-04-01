@@ -5,6 +5,9 @@
 #include "ast_type.h"
 #include "ast_decl.h"
 #include <string.h>
+#include "ast_stmt.h"
+#include "errors.h"
+
 
  
 /* Class constants
@@ -34,12 +37,45 @@ Type::Type(const char *n) {
 NamedType::NamedType(Identifier *i) : Type(*i->GetLocation()) {
     Assert(i != NULL);
     (id=i)->SetParent(this);
-} 
-
+}
+bool NamedType::IsEquivalentTo(Type *nt) {
+  if (typeid(*nt) == typeid(NamedType))
+    return !strcmp(this->GetTypeName(), nt->GetTypeName());
+  else
+    return false;
+}
+ 
+void NamedType::CheckTypeError() {
+  const char *name = this->id->GetName();
+  Decl *decl = Program::global_table->Lookup(name);
+  if ((decl == NULL) || (((typeid(*decl) != typeid(ClassDecl))) && ((typeid(*decl) != typeid(InterfaceDecl)))))
+    {
+      ReportError::IdentifierNotDeclared(id, LookingForType);
+      this->id = NULL;
+    }
+}
 
 ArrayType::ArrayType(yyltype loc, Type *et) : Type(loc) {
     Assert(et != NULL);
     (elemType=et)->SetParent(this);
 }
+const char *ArrayType::GetTypeName() { 
+  if (this->elemType) 
+    {
+      string delim = "[]";
+      string str = this->elemType->GetTypeName() + delim;
+      return str.c_str();
+    }
+  else 
+    return NULL;
+}
 
+
+bool ArrayType::IsEquivalentTo(Type *at) {
+  return this->elemType->IsEquivalentTo(at->GetElemType());
+}
+
+void ArrayType::CheckTypeError() {
+  this->elemType->CheckTypeError();
+}
 

@@ -9,7 +9,7 @@
 #include "ast_expr.h"
 #include "errors.h"
 
-Hashtable<Decl*> *Program::global_table  = new Hashtable<Decl*>;
+Hashtable<Decl*> *Program::scope_table  = new Hashtable<Decl*>;
 
 Program::Program(List<Decl*> *d) {
     Assert(d != NULL);
@@ -120,10 +120,10 @@ void ForStmt::Check() {
   if (this->step)
     this->step->Check();
   ConditionalStmt::Check();
-
-  //ConditionalStmt::Check();//decl
 }
-
+void WhileStmt::Check() {
+  ConditionalStmt::Check();
+}
 IfStmt::IfStmt(Expr *t, Stmt *tb, Stmt *eb): ConditionalStmt(t, tb) { 
     Assert(t != NULL && tb != NULL); // else can be NULL
     elseBody = eb;
