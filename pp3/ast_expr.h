@@ -15,10 +15,12 @@
 
 #include "ast.h"
 #include "ast_stmt.h"
-#include "list.h"
 
-class NamedType; // for new
-class Type; // for NewArray
+#include "ast_type.h"
+#include "list.h"
+class FnDecl;
+//class NamedType; // for new
+//class Type; // for NewArray
 
 
 class Expr : public Stmt 
@@ -119,7 +121,7 @@ class RelationalExpr : public CompoundExpr
   public:
     RelationalExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     void Check();
-    Type *GetType() { return Type::boolType; }
+    //Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
 };
 
@@ -129,7 +131,7 @@ class EqualityExpr : public CompoundExpr
     EqualityExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     const char *GetPrintNameForNode() { return "EqualityExpr"; }
     void Check();
-    Type *GetType() { return Type::boolType; }
+    //Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
 };
 
@@ -139,7 +141,7 @@ class LogicalExpr : public CompoundExpr
     LogicalExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     LogicalExpr(Operator *op, Expr *rhs) : CompoundExpr(op,rhs) {}
     void Check();
-    Type *GetType() { return Type::boolType; }
+    //Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
     const char *GetPrintNameForNode() { return "LogicalExpr"; }
 };
@@ -190,7 +192,7 @@ class FieldAccess : public LValue
   protected:
     Expr *base;	// will be NULL if no explicit base
     Identifier *field;
-    Type *type; // Expr::type is protected and thus not inherited here
+    Type* type; // Expr::type is protected and thus not inherited here
     
   public:
     FieldAccess(Expr *base, Identifier *field); //ok to pass NULL base
@@ -216,19 +218,19 @@ class Call : public Expr
     void CheckArguments(FnDecl *fndecl); // check arguments against formal parameters
     void Check(); // its type is decided here
     Type* GetType() { return type; }
-    const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
+    const char* GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
 };
 
 class NewExpr : public Expr
 {
   protected:
-    NamedType *cType;
+    NamedType* cType;
     
   public:
     NewExpr(yyltype loc, NamedType *clsType);
     void Check();
-    Type *GetType() { return cType; }
-    const char *GetTypeName() { if (cType) return cType->GetTypeName(); else return NULL;  }
+    Type* GetType() { return cType; }
+    const char* GetTypeName() { if (cType) return cType->GetTypeName(); else return NULL;  }
 };
 
 class NewArrayExpr : public Expr

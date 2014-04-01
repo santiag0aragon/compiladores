@@ -335,7 +335,7 @@ void Call::CheckArguments(FnDecl *fndecl) {
 		ReportError::ArgMismatch(expr, (i+1), new Type(given), new Type(expected));
               else if (gdecl == NULL && edecl == NULL && strcmp(given, expected)) // non-object arguments
                 ReportError::ArgMismatch(expr, (i+1), new Type(given), new Type(expected));
-	    }
+	          }
 	}
     }
 }
