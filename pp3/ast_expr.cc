@@ -83,7 +83,6 @@ void ArithmeticExpr::Check() {
 void RelationalExpr::Check() {
   this->left->Check();
   const char *lt = this->left->GetTypeName();
-
   this->right->Check();
   const char *rt = this->right->GetTypeName();
   if (lt && rt) // binary
@@ -102,8 +101,8 @@ void EqualityExpr::Check() {
   const char *rt = this->right->GetTypeName();
   if (lt && rt)
     {
-      Decl *ldecl = Program::sym_table->Lookup(lt);
-      Decl *rdecl = Program::sym_table->Lookup(rt);
+      Decl *ldecl = Program::global_table->Lookup(lt);
+      Decl *rdecl = Program::global_table->Lookup(rt);
 
       if (ldecl && rdecl) // objects
 	{
@@ -160,8 +159,8 @@ void AssignExpr::Check() {
 
   if (lt && rt)
     {
-      Decl *ldecl = Program::scope_table->Lookup(lt);
-      Decl *rdecl = Program::scope_table->Lookup(rt);
+      Decl *ldecl = Program::global_table->Lookup(lt);
+      Decl *rdecl = Program::global_table->Lookup(rt);
 
       if (ldecl && rdecl) // objects
         {
@@ -250,11 +249,11 @@ void FieldAccess::Check() {
 	  // otherwise the variable is inaccessible
 	  while (parent)
 	    {
-	      Hashtable<Decl*> *sym_table = parent->GetSymTable();
-	      if (sym_table)
-		if ((cldecl = sym_table->Lookup(name)) != NULL)
+	      Hashtable<Decl*> *scope_table = parent->GetScopeTable();
+	      if (scope_table)
+		if ((cldecl = scope_table->Lookup(name)) != NULL)
 		  {
-		    decl = this->field->CheckIdDecl(cldecl->GetSymTable(), this->field->GetName());
+		    decl = this->field->CheckIdDecl(cldecl->GetScopeTable(), this->field->GetName());
                     if ((decl == NULL) || (typeid(*decl) != typeid(VarDecl)))
        	              ReportError::FieldNotFoundInBase(this->field, new Type(name));
 		  }
@@ -262,9 +261,9 @@ void FieldAccess::Check() {
 	    }
 	  if (cldecl == NULL)
 	    {
-	      if ((cldecl = Program::sym_table->Lookup(name)) != NULL) // look up global symbol table
+	      if ((cldecl = Program::global_table->Lookup(name)) != NULL) // look up global symbol table
 	        {
-	          decl = this->field->CheckIdDecl(cldecl->GetSymTable(), this->field->GetName());
+	          decl = this->field->CheckIdDecl(cldecl->GetScopeTable(), this->field->GetName());
 	          if ((decl != NULL) && (typeid(*decl) == typeid(VarDecl)))
 	            ReportError::InaccessibleField(this->field, new Type(name)); // data member is private
 	          else
@@ -319,8 +318,8 @@ void Call::CheckArguments(FnDecl *fndecl) {
 
           if (given && expected)
             {
-              Decl *gdecl = Program::sym_table->Lookup(given);
-              Decl *edecl = Program::sym_table->Lookup(expected);
+              Decl *gdecl = Program::global_table->Lookup(given);
+              Decl *edecl = Program::global_table->Lookup(expected);
 
               if (gdecl && edecl) // objects
                 {
@@ -358,9 +357,9 @@ void Call::Check() {
       // no need to check the accessibility
       if (name)
         {
-          if ((decl = Program::sym_table->Lookup(name)) != NULL)
+          if ((decl = Program::global_table->Lookup(name)) != NULL)
 	    {
-	      decl = this->field->CheckIdDecl(decl->GetSymTable(), this->field->GetName());
+	      decl = this->field->CheckIdDecl(decl->GetScopeTable(), this->field->GetName());
 	      if ((decl == NULL) || (typeid(*decl) != typeid(FnDecl)))
 		ReportError::FieldNotFoundInBase(this->field, new Type(name));
 	      else
@@ -404,7 +403,7 @@ void NewExpr::Check() {
       const char *name = this->cType->GetTypeName();
       if (name)
         {
-          Decl *decl = Program::sym_table->Lookup(name);
+          Decl *decl = Program::global_table->Lookup(name);
           if ((decl == NULL) || (typeid(*decl) != typeid(ClassDecl)))
             ReportError::IdentifierNotDeclared(new Identifier(*this->cType->GetLocation(), name), LookingForClass);
         }
@@ -420,8 +419,8 @@ NewArrayExpr::NewArrayExpr(yyltype loc, Expr *sz, Type *et) : Expr(loc) {
 const char *NewArrayExpr::GetTypeName() {
   if (this->elemType)
     {
-      string delim = "[]";
-      string str = this->elemType->GetTypeName() + delim;
+      std::string delim = "[]";
+      std::string str = this->elemType->GetTypeName() + delim;
       return str.c_str();
     }
   else
@@ -461,4 +460,3 @@ void PostfixExpr::Check() {
 	ReportError::IncompatibleOperand(this->optr, this->lvalue->GetType());
     }
 }
-      
