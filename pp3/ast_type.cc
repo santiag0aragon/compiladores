@@ -62,8 +62,8 @@ ArrayType::ArrayType(yyltype loc, Type *et) : Type(loc) {
 const char *ArrayType::GetTypeName() { 
   if (this->elemType) 
     {
-      string delim = "[]";
-      string str = this->elemType->GetTypeName() + delim;
+      std::string delim = "[]";
+      std::string str = this->elemType->GetTypeName() + delim;
       return str.c_str();
     }
   else 

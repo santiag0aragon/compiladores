@@ -53,7 +53,7 @@ class StmtBlock : public Stmt
     void Check();
     Hashtable<Decl*> *GetScopeTable() { return scope_table; }
     const char *GetPrintNameForNode() { return "StmtBlock"; }
-    void PrintChildren(int indentLevel);    
+    virtual void PrintChildren(int indentLevel);    
 };
 
   

@@ -48,7 +48,7 @@ class Node
   public:
     Node(yyltype loc);
     Node();
-  virtual ~Node() {}
+    virtual ~Node() {}
     
     yyltype *GetLocation()   { return location; }
     void SetParent(Node *p)  { parent = p; }
@@ -60,7 +60,7 @@ class Node
     virtual const char *GetPrintNameForNode() = 0;
     // Print() is deliberately _not_ virtual
     // subclasses should override PrintChildren() instead
-    virtual void PrintChildren(int indentLevel)  {}
+     void PrintChildren(int indentLevel)  {}
 };
    
 
@@ -70,11 +70,12 @@ class Identifier : public Node
     char *name;
     
   public:
+    virtual ~Identifier() {}
     Identifier(yyltype loc, const char *name);
     const char *GetName() { return name; }
     Decl *CheckIdDecl();
     Decl *CheckIdDecl(Hashtable<Decl*> *scope_table, const char *name);
-    friend std::ostream& operator<<(std::ostream& out, Identifier *id) { return out << id->name; }
+    //friend std::ostream& operator<<(std::ostream& out, Identifier *id) { return out << id->name; }
     const char *GetPrintNameForNode()   { return "Identifier"; }
     void PrintChildren(int indentLevel);
 };

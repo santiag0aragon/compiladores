@@ -120,13 +120,14 @@ ast.o: /usr/include/sys/_types/_ct_rune_t.h /usr/include/sys/_types/_rune_t.h
 ast.o: /usr/include/sys/_types/_wchar_t.h /usr/include/sys/_types/_null.h
 ast.o: /usr/include/machine/types.h /usr/include/i386/types.h
 ast.o: /usr/include/sys/_types/___offsetof.h /usr/include/sys/_types/_dev_t.h
-ast.o: /usr/include/sys/_types/_mode_t.h location.h ast_type.h list.h
-ast.o: utility.h /usr/include/stdio.h /usr/include/sys/_types/_va_list.h
-ast.o: /usr/include/sys/_types/_off_t.h /usr/include/sys/_types/_ssize_t.h
-ast.o: /usr/include/secure/_stdio.h /usr/include/secure/_common.h ast_decl.h
+ast.o: /usr/include/sys/_types/_mode_t.h location.h errors.h hashtable.h
 ast.o: /usr/include/string.h /usr/include/sys/_types/_rsize_t.h
-ast.o: /usr/include/sys/_types/_errno_t.h /usr/include/strings.h
-ast.o: /usr/include/secure/_string.h
+ast.o: /usr/include/sys/_types/_errno_t.h /usr/include/sys/_types/_ssize_t.h
+ast.o: /usr/include/strings.h /usr/include/secure/_string.h
+ast.o: /usr/include/secure/_common.h hashtable.cc list.h utility.h
+ast.o: /usr/include/stdio.h /usr/include/sys/_types/_va_list.h
+ast.o: /usr/include/sys/_types/_off_t.h /usr/include/secure/_stdio.h
+ast.o: ast_type.h ast_decl.h ast_stmt.h
 ast_decl.o: ast_decl.h ast.h /usr/include/stdlib.h
 ast_decl.o: /usr/include/Availability.h /usr/include/AvailabilityInternal.h
 ast_decl.o: /usr/include/_types.h /usr/include/sys/_types.h
@@ -163,14 +164,15 @@ ast_decl.o: /usr/include/sys/_types/_wchar_t.h
 ast_decl.o: /usr/include/sys/_types/_null.h /usr/include/machine/types.h
 ast_decl.o: /usr/include/i386/types.h /usr/include/sys/_types/___offsetof.h
 ast_decl.o: /usr/include/sys/_types/_dev_t.h
-ast_decl.o: /usr/include/sys/_types/_mode_t.h location.h list.h utility.h
-ast_decl.o: /usr/include/stdio.h /usr/include/sys/_types/_va_list.h
-ast_decl.o: /usr/include/sys/_types/_off_t.h
-ast_decl.o: /usr/include/sys/_types/_ssize_t.h /usr/include/secure/_stdio.h
-ast_decl.o: /usr/include/secure/_common.h ast_type.h ast_stmt.h hashtable.h
+ast_decl.o: /usr/include/sys/_types/_mode_t.h location.h errors.h hashtable.h
 ast_decl.o: /usr/include/string.h /usr/include/sys/_types/_rsize_t.h
-ast_decl.o: /usr/include/sys/_types/_errno_t.h /usr/include/strings.h
-ast_decl.o: /usr/include/secure/_string.h hashtable.cc
+ast_decl.o: /usr/include/sys/_types/_errno_t.h
+ast_decl.o: /usr/include/sys/_types/_ssize_t.h /usr/include/strings.h
+ast_decl.o: /usr/include/secure/_string.h /usr/include/secure/_common.h
+ast_decl.o: hashtable.cc list.h utility.h /usr/include/stdio.h
+ast_decl.o: /usr/include/sys/_types/_va_list.h
+ast_decl.o: /usr/include/sys/_types/_off_t.h /usr/include/secure/_stdio.h
+ast_decl.o: ast_type.h ast_stmt.h
 ast_expr.o: ast_expr.h ast.h /usr/include/stdlib.h
 ast_expr.o: /usr/include/Availability.h /usr/include/AvailabilityInternal.h
 ast_expr.o: /usr/include/_types.h /usr/include/sys/_types.h
@@ -207,14 +209,15 @@ ast_expr.o: /usr/include/sys/_types/_wchar_t.h
 ast_expr.o: /usr/include/sys/_types/_null.h /usr/include/machine/types.h
 ast_expr.o: /usr/include/i386/types.h /usr/include/sys/_types/___offsetof.h
 ast_expr.o: /usr/include/sys/_types/_dev_t.h
-ast_expr.o: /usr/include/sys/_types/_mode_t.h location.h ast_stmt.h list.h
-ast_expr.o: utility.h /usr/include/stdio.h /usr/include/sys/_types/_va_list.h
-ast_expr.o: /usr/include/sys/_types/_off_t.h
-ast_expr.o: /usr/include/sys/_types/_ssize_t.h /usr/include/secure/_stdio.h
-ast_expr.o: /usr/include/secure/_common.h hashtable.h /usr/include/string.h
-ast_expr.o: /usr/include/sys/_types/_rsize_t.h
-ast_expr.o: /usr/include/sys/_types/_errno_t.h /usr/include/strings.h
-ast_expr.o: /usr/include/secure/_string.h hashtable.cc ast_type.h ast_decl.h
+ast_expr.o: /usr/include/sys/_types/_mode_t.h location.h errors.h hashtable.h
+ast_expr.o: /usr/include/string.h /usr/include/sys/_types/_rsize_t.h
+ast_expr.o: /usr/include/sys/_types/_errno_t.h
+ast_expr.o: /usr/include/sys/_types/_ssize_t.h /usr/include/strings.h
+ast_expr.o: /usr/include/secure/_string.h /usr/include/secure/_common.h
+ast_expr.o: hashtable.cc list.h utility.h /usr/include/stdio.h
+ast_expr.o: /usr/include/sys/_types/_va_list.h
+ast_expr.o: /usr/include/sys/_types/_off_t.h /usr/include/secure/_stdio.h
+ast_expr.o: ast_stmt.h ast_type.h ast_decl.h
 ast_stmt.o: ast_stmt.h list.h utility.h /usr/include/stdlib.h
 ast_stmt.o: /usr/include/Availability.h /usr/include/AvailabilityInternal.h
 ast_stmt.o: /usr/include/_types.h /usr/include/sys/_types.h
@@ -255,11 +258,12 @@ ast_stmt.o: /usr/include/sys/_types/_mode_t.h /usr/include/stdio.h
 ast_stmt.o: /usr/include/sys/_types/_va_list.h
 ast_stmt.o: /usr/include/sys/_types/_off_t.h
 ast_stmt.o: /usr/include/sys/_types/_ssize_t.h /usr/include/secure/_stdio.h
-ast_stmt.o: /usr/include/secure/_common.h ast.h location.h hashtable.h
-ast_stmt.o: /usr/include/string.h /usr/include/sys/_types/_rsize_t.h
+ast_stmt.o: /usr/include/secure/_common.h ast.h location.h errors.h
+ast_stmt.o: hashtable.h /usr/include/string.h
+ast_stmt.o: /usr/include/sys/_types/_rsize_t.h
 ast_stmt.o: /usr/include/sys/_types/_errno_t.h /usr/include/strings.h
 ast_stmt.o: /usr/include/secure/_string.h hashtable.cc ast_type.h ast_decl.h
-ast_stmt.o: ast_expr.h errors.h
+ast_stmt.o: ast_expr.h
 ast_type.o: ast_type.h ast.h /usr/include/stdlib.h
 ast_type.o: /usr/include/Availability.h /usr/include/AvailabilityInternal.h
 ast_type.o: /usr/include/_types.h /usr/include/sys/_types.h
@@ -296,14 +300,15 @@ ast_type.o: /usr/include/sys/_types/_wchar_t.h
 ast_type.o: /usr/include/sys/_types/_null.h /usr/include/machine/types.h
 ast_type.o: /usr/include/i386/types.h /usr/include/sys/_types/___offsetof.h
 ast_type.o: /usr/include/sys/_types/_dev_t.h
-ast_type.o: /usr/include/sys/_types/_mode_t.h location.h list.h utility.h
-ast_type.o: /usr/include/stdio.h /usr/include/sys/_types/_va_list.h
-ast_type.o: /usr/include/sys/_types/_off_t.h
-ast_type.o: /usr/include/sys/_types/_ssize_t.h /usr/include/secure/_stdio.h
-ast_type.o: /usr/include/secure/_common.h ast_decl.h /usr/include/string.h
-ast_type.o: /usr/include/sys/_types/_rsize_t.h
-ast_type.o: /usr/include/sys/_types/_errno_t.h /usr/include/strings.h
-ast_type.o: /usr/include/secure/_string.h
+ast_type.o: /usr/include/sys/_types/_mode_t.h location.h errors.h hashtable.h
+ast_type.o: /usr/include/string.h /usr/include/sys/_types/_rsize_t.h
+ast_type.o: /usr/include/sys/_types/_errno_t.h
+ast_type.o: /usr/include/sys/_types/_ssize_t.h /usr/include/strings.h
+ast_type.o: /usr/include/secure/_string.h /usr/include/secure/_common.h
+ast_type.o: hashtable.cc list.h utility.h /usr/include/stdio.h
+ast_type.o: /usr/include/sys/_types/_va_list.h
+ast_type.o: /usr/include/sys/_types/_off_t.h /usr/include/secure/_stdio.h
+ast_type.o: ast_decl.h ast_stmt.h
 errors.o: errors.h location.h /usr/include/stdio.h /usr/include/sys/cdefs.h
 errors.o: /usr/include/sys/_symbol_aliasing.h
 errors.o: /usr/include/sys/_posix_availability.h /usr/include/Availability.h
@@ -341,10 +346,11 @@ errors.o: /usr/include/sys/_types/_rune_t.h
 errors.o: /usr/include/sys/_types/_wchar_t.h /usr/include/machine/types.h
 errors.o: /usr/include/i386/types.h /usr/include/sys/_types/___offsetof.h
 errors.o: /usr/include/sys/_types/_dev_t.h /usr/include/sys/_types/_mode_t.h
-errors.o: list.h utility.h ast_expr.h ast_stmt.h hashtable.h
-errors.o: /usr/include/string.h /usr/include/sys/_types/_rsize_t.h
+errors.o: hashtable.h /usr/include/string.h
+errors.o: /usr/include/sys/_types/_rsize_t.h
 errors.o: /usr/include/sys/_types/_errno_t.h /usr/include/strings.h
-errors.o: /usr/include/secure/_string.h hashtable.cc ast_decl.h
+errors.o: /usr/include/secure/_string.h hashtable.cc list.h utility.h
+errors.o: ast_expr.h ast_stmt.h ast_decl.h
 utility.o: utility.h /usr/include/stdlib.h /usr/include/Availability.h
 utility.o: /usr/include/AvailabilityInternal.h /usr/include/_types.h
 utility.o: /usr/include/sys/_types.h /usr/include/sys/cdefs.h
@@ -424,5 +430,5 @@ main.o: /usr/include/sys/_types/_rune_t.h /usr/include/sys/_types/_wchar_t.h
 main.o: /usr/include/machine/types.h /usr/include/i386/types.h
 main.o: /usr/include/sys/_types/___offsetof.h
 main.o: /usr/include/sys/_types/_dev_t.h /usr/include/sys/_types/_mode_t.h
-main.o: errors.h location.h parser.h scanner.h list.h ast.h ast_type.h
-main.o: ast_decl.h ast_expr.h ast_stmt.h hashtable.h hashtable.cc y.tab.h
+main.o: errors.h location.h parser.h scanner.h list.h ast.h hashtable.h
+main.o: hashtable.cc ast_type.h ast_decl.h ast_stmt.h ast_expr.h y.tab.h
