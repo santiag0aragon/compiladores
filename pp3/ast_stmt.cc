@@ -9,7 +9,7 @@
 #include "ast_expr.h"
 #include "errors.h"
 
-Hashtable<Decl*> *Program::scope_table  = new Hashtable<Decl*>;
+Hashtable<Decl*> *Program::global_table  = new Hashtable<Decl*>;
 
 Program::Program(List<Decl*> *d) {
     Assert(d != NULL);
@@ -46,8 +46,8 @@ void Program::Check() {
       
 
 }
-
-StmtBlock::StmtBlock(List<VarDecl*> *d, List<Stmt*> *s) {
+}
+StmtBlock::StmtBlock(List<VarDecl*>* d, List<Stmt*>* s) {
     Assert(d != NULL && s != NULL);
     (decls=d)->SetParentAll(this);
     (stmts=s)->SetParentAll(this);
@@ -98,6 +98,7 @@ ConditionalStmt::ConditionalStmt(Expr *t, Stmt *b) {
     Assert(t != NULL && b != NULL);
     (test=t)->SetParent(this); 
     (body=b)->SetParent(this);
+  }
 void ConditionalStmt::Check() {
   this->test->Check();//stmt
   if (strcmp(this->test->GetTypeName(), "bool"))
