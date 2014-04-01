@@ -70,13 +70,14 @@ class InterfaceDecl : public Decl
 {
   protected:
     List<Decl*> *members;
-  Hashtable<Decl*>* scope_table;
+    Hashtable<Decl*>* scope_table;
     
   public:
     InterfaceDecl(Identifier *name, List<Decl*> *members);
-  void CheckDeclError();
-  List<Decl*> *GetMembers() { return members; }
-  Hashtable<Decl*>* GetScopeTable() { return scope_table; }
+    void CheckDeclError();
+    List<Decl*> *GetMembers() { return members; }
+    Hashtable<Decl*>* GetScopeTable() { return scope_table; }
+    void Check();
 };
 
 class FnDecl : public Decl 

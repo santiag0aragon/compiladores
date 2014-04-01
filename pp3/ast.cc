@@ -29,7 +29,7 @@ Decl *Identifier::CheckIdDecl() {
   Node *parent = this->GetParent();
   while (parent)
     {
-      Hashtable<Decl*> *scope_table = parent->GetSymTable();
+      Hashtable<Decl*> *scope_table = parent->GetScopeTable();
       if (scope_table != NULL)
 	{
 	  if ((decl = scope_table->Lookup(this->name)) != NULL)
@@ -47,7 +47,7 @@ Decl *Identifier::CheckIdDecl() {
 Decl *Identifier::CheckIdDecl(Hashtable<Decl*> *scope_table, const char *name)
 {
   Decl *decl = NULL;
-  if (sym_table)
+  if (scope_table)
     decl = scope_table->Lookup(name);
   return decl;
 }

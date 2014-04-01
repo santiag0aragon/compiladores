@@ -28,6 +28,9 @@ class Expr : public Stmt
   public:
     Expr(yyltype loc) : Stmt(loc) {}
     Expr() : Stmt() {}
+ virtual Type *GetType() { return type; }
+    virtual const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL;}
+
 };
 
 /* This node type is used for those places where an expression is optional.
@@ -242,7 +245,7 @@ class PostfixExpr : public Expr
   public:
     PostfixExpr(yyltype loc, LValue *lv, Operator *op);
     void Check();
-    Type *GetType() { if (lvalue) return lvalue->GetType(); else return NULL; }
+    Type* GetType() { if (lvalue) return lvalue->GetType(); else return NULL; }
     const char *GetTypeName() { if (lvalue) return lvalue->GetTypeName(); else return NULL; }
 };
       

@@ -46,17 +46,15 @@ ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<D
     (members=m)->SetParentAll(this);
     this->scope_table = new Hashtable<Decl*>;
 }
-void ClassDecl::CheckStatements() {
+void ClassDecl::Check() {
   if (this->members)
     {
       for (int i = 0; i < this->members->NumElements(); i++)
-	this->members->Nth(i)->CheckStatements();
+	this->members->Nth(i)->Check();
     }
-}
 
-void ClassDecl::CheckDeclError() {
   // add itself to the symbol table
-  this->sym_table->Enter(this->GetID()->GetName(), this);
+  this->scope_table->Enter(this->GetID()->GetName(), this);
 
   // check decl conflicts of its members and add the decl to symbol table if no errors
   if (this->members)
@@ -68,10 +66,10 @@ void ClassDecl::CheckDeclError() {
 	  const char *name = cur->GetID()->GetName();
 	  if (name)
 	    {
-	      if ((prev = this->sym_table->Lookup(name)) != NULL)
+	      if ((prev = this->scope_table->Lookup(name)) != NULL)
 		ReportError::DeclConflict(cur, prev);
 	      else
-		this->sym_table->Enter(name, cur);
+		this->scope_table->Enter(name, cur);
 	    }
         }
     }
@@ -124,7 +122,7 @@ void ClassDecl::CheckDeclError() {
 		   for (int i = 0; i < inherited->NumElements(); i++)
 		     {
 		       Decl *decl = inherited->Nth(i);
-		       this->sym_table->Enter(decl->GetID()->GetName(), decl);
+		       this->scope_table->Enter(decl->GetID()->GetName(), decl);
 		     }
 		}
 	      ex = base->GetExtends();
@@ -140,7 +138,7 @@ void ClassDecl::CheckDeclError() {
 	  Identifier *id = implement->GetID();
 	  if (id)
 	    {
-	      Node *node = Program::sym_table->Lookup(id->GetName());
+	      Node *node = Program::global_table->Lookup(id->GetName());
 	      if (node == NULL || (typeid(*node) != typeid(InterfaceDecl)))
 		{
 		  ReportError::IdentifierNotDeclared(id, LookingForInterface);
@@ -173,7 +171,7 @@ void ClassDecl::CheckDeclError() {
   if (this->members)
     {
       for (int i = 0; i < this->members->NumElements(); i++)
-	this->members->Nth(i)->CheckDeclError();
+	this->members->Nth(i)->Check();
     }
 }
 
@@ -255,25 +253,26 @@ void InterfaceDecl::Check() {
 		}
 	      else
 		{
-		  sym_table->Enter(name, cur);
+		  scope_table->Enter(name, cur);
 		}
 	    }
 	}
     }
+}
 
 	
-FnDecl::FnDecl(Identifier *n, Type *r, List<VarDecl*> *d) : Decl(n) {
+FnDecl::FnDecl(Identifier* n, Type *r, List<VarDecl*> *d) : Decl(n) {
     Assert(n != NULL && r!= NULL && d != NULL);
     (returnType=r)->SetParent(this);
     (formals=d)->SetParentAll(this);
     body = NULL;
-  this->scope_table  = new Hashtable<Decl*>;
+    this->scope_table  = new Hashtable<Decl*>;
 }
 
 
 bool FnDecl::HasSameTypeSig(FnDecl *fd) {
   if (!strcmp(this->id->GetName(), fd->GetID()->GetName()))
-    if (this->returnType->HasSameType(fd->GetType()))
+    if (this->returnType->IsEquivalentTo(fd->GetType()))
       {
 	List<VarDecl*> *f1 = formals;
 	List<VarDecl*> *f2 = fd->GetFormals();
@@ -291,6 +290,7 @@ bool FnDecl::HasSameTypeSig(FnDecl *fd) {
 	      return true;
 	    }
       }
+  }
 
 void FnDecl::Check() {
 
@@ -304,13 +304,13 @@ void FnDecl::Check() {
 	  const char *name = cur->GetID()->GetName();
 	  if (name)
 	    {
-	      if ((prev = this->sym_table->Lookup(name)) != NULL)
+	      if ((prev = this->scope_table->Lookup(name)) != NULL)
 		{
 		  ReportError::DeclConflict(cur, prev);
 		}
 	      else
 		{
-		  sym_table->Enter(name, cur);
+		  scope_table->Enter(name, cur);
 		  cur->Check();
 		}
 	    }
@@ -323,9 +323,10 @@ void FnDecl::Check() {
 
 }
 
-void FnDecl::SetFunctionBody(Stmt *b) { 
+void FnDecl::SetFunctionBody(StmtBlock *b) { 
     (body=b)->SetParent(this);
 }
+
 
 
 
