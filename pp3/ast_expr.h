@@ -246,13 +246,13 @@ class NewArrayExpr : public Expr
 class ReadIntegerExpr : public Expr
 {
   public:
-    ReadIntegerExpr(yyltype loc) : Expr(loc) {}
+    ReadIntegerExpr(yyltype loc);
 };
 
 class ReadLineExpr : public Expr
 {
   public:
-    ReadLineExpr(yyltype loc) : Expr (loc) {}
+    ReadLineExpr(yyltype loc);
 };
 
 class PostfixExpr : public Expr
