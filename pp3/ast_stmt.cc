@@ -289,4 +289,43 @@ void SwitchStmt::Check() {
   if (this->defaults)
     this->defaults->Check();*/
 }
+void Program::PrintChildren(int indentLevel) {
+    decls->PrintAll(indentLevel+1);
+    printf("\n");
+}
+void StmtBlock::PrintChildren(int indentLevel) {
+    decls->PrintAll(indentLevel+1);
+    stmts->PrintAll(indentLevel+1);
+}
+void ForStmt::PrintChildren(int indentLevel) {
+    init->Print(indentLevel+1, "(init) ");
+    test->Print(indentLevel+1, "(test) ");
+    step->Print(indentLevel+1, "(step) ");
+    body->Print(indentLevel+1, "(body) ");
+}
 
+void WhileStmt::PrintChildren(int indentLevel) {
+    test->Print(indentLevel+1, "(test) ");
+    body->Print(indentLevel+1, "(body) ");
+}
+void IfStmt::PrintChildren(int indentLevel) {
+    if (test) test->Print(indentLevel+1, "(test) ");
+    if (body) body->Print(indentLevel+1, "(then) ");
+    if (elseBody) elseBody->Print(indentLevel+1, "(else) ");
+}
+PrintStmt::PrintStmt(List<Expr*> *a) {    
+    Assert(a != NULL);
+    (args=a)->SetParentAll(this);
+}
+
+void PrintStmt::PrintChildren(int indentLevel) {
+    args->PrintAll(indentLevel+1, "(args) ");
+}
+void SwitchStmt::PrintChildren(int indentLevel) {
+    expr->Print(indentLevel+1);
+    cases->PrintAll(indentLevel+1);
+    if (defaults) defaults->Print(indentLevel+1);
+}
+void DefaultStmt::PrintChildren(int indentLevel) {
+    if (stmts) stmts->PrintAll(indentLevel+1);
+}

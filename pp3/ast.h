@@ -55,6 +55,12 @@ class Node
     Node *GetParent()        { return parent; }
     virtual void Check(){}
     virtual Hashtable<Decl*>* GetScopeTable() {return NULL;}
+    void Print(int indentLevel, const char *label);
+
+    virtual const char *GetPrintNameForNode() = 0;
+    // Print() is deliberately _not_ virtual
+    // subclasses should override PrintChildren() instead
+    virtual void PrintChildren(int indentLevel)  {}
 };
    
 
@@ -69,6 +75,8 @@ class Identifier : public Node
     Decl *CheckIdDecl();
     Decl *CheckIdDecl(Hashtable<Decl*> *scope_table, const char *name);
     friend std::ostream& operator<<(std::ostream& out, Identifier *id) { return out << id->name; }
+    const char *GetPrintNameForNode()   { return "Identifier"; }
+    void PrintChildren(int indentLevel);
 };
 
 
