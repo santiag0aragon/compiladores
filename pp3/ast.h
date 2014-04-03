@@ -60,7 +60,7 @@ class Node
     virtual const char *GetPrintNameForNode() = 0;
     // Print() is deliberately _not_ virtual
     // subclasses should override PrintChildren() instead
-     void PrintChildren(int indentLevel)  {}
+    void PrintChildren(int indentLevel)  {}
 };
    
 
@@ -75,7 +75,7 @@ class Identifier : public Node
     const char *GetName() { return name; }
     Decl *CheckIdDecl();
     Decl *CheckIdDecl(Hashtable<Decl*> *scope_table, const char *name);
-    //friend std::ostream& operator<<(std::ostream& out, Identifier *id) { return out << id->name; }
+    friend std::ostream& operator<<(std::ostream& out, Identifier *id) { return out << id->name; }
     const char *GetPrintNameForNode()   { return "Identifier"; }
     void PrintChildren(int indentLevel);
 };

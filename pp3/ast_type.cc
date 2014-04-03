@@ -9,7 +9,7 @@
 #include "errors.h"
 
 
- 
+
 /* Class constants
  * ---------------
  * These are public constants for the built-in base types (int, double, etc.)
@@ -24,19 +24,17 @@ Type *Type::voidType   = new Type("void");
 Type *Type::boolType   = new Type("bool");
 Type *Type::nullType   = new Type("null");
 Type *Type::stringType = new Type("string");
-Type *Type::errorType  = new Type("error"); 
+Type *Type::errorType  = new Type("error");
 
 Type::Type(const char *n) {
-    Assert(n);
-    typeName = strdup(n);
+	Assert(n);
+	typeName = strdup(n);
 }
 
 
-
-	
 NamedType::NamedType(Identifier *i) : Type(*i->GetLocation()) {
-    Assert(i != NULL);
-    (id=i)->SetParent(this);
+	Assert(i != NULL);
+	(id=i)->SetParent(this);
 }
 bool NamedType::IsEquivalentTo(Type *nt) {
   if (typeid(*nt) == typeid(NamedType))
@@ -44,29 +42,30 @@ bool NamedType::IsEquivalentTo(Type *nt) {
   else
     return false;
 }
- 
+
 void NamedType::CheckTypeError() {
+  //printf("=====================NamedType::CheckTypeError ");
   const char *name = this->id->GetName();
   Decl *decl = Program::global_table->Lookup(name);
   if ((decl == NULL) || (((typeid(*decl) != typeid(ClassDecl))) && ((typeid(*decl) != typeid(InterfaceDecl)))))
     {
-      ReportError::IdentifierNotDeclared(id, LookingForType);
-      this->id = NULL;
+		ReportError::IdentifierNotDeclared(id, LookingForType);
+		this->id = NULL;
     }
 }
 
 ArrayType::ArrayType(yyltype loc, Type *et) : Type(loc) {
-    Assert(et != NULL);
-    (elemType=et)->SetParent(this);
+	Assert(et != NULL);
+	(elemType=et)->SetParent(this);
 }
-const char *ArrayType::GetTypeName() { 
-  if (this->elemType) 
+const char *ArrayType::GetTypeName() {
+  if (this->elemType)
     {
-      std::string delim = "[]";
-      std::string str = this->elemType->GetTypeName() + delim;
-      return str.c_str();
+		std::string delim = "[]";
+		std::string str = this->elemType->GetTypeName() + delim;
+		return str.c_str();
     }
-  else 
+  else
     return NULL;
 }
 
@@ -76,6 +75,7 @@ bool ArrayType::IsEquivalentTo(Type *at) {
 }
 
 void ArrayType::CheckTypeError() {
+	//printf("=====================ArrayType::CheckTypeError ");
   this->elemType->CheckTypeError();
 }
 

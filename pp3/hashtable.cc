@@ -2,7 +2,6 @@
  * ------------------
  * Implementation of Hashtable class.
  */
-   
 
 /* Hashtable::Enter
  * ----------------
@@ -96,4 +95,6 @@ template <class Value> Value Iterator<Value>::GetNextValue()
 {
   return (cur == end ? NULL : (*cur++).second);
 }
+
+
 

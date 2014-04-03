@@ -29,6 +29,7 @@ class Type : public Node
     Type(yyltype loc) : Node(loc) {}
     Type(const char *str);
     const char *GetPrintNameForNode() { return "Type"; }
+	  char *GetName() { return this->typeName; }
     void PrintChildren(int indentLevel);
     virtual void PrintToStream(std::ostream& out) { out << typeName; }
     virtual Type *GetElemType() { return this; }

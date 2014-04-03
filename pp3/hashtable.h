@@ -50,6 +50,16 @@ template<class Value> class Hashtable {
      std::multimap<const char*, Value, ltstr> mmap;
  
    public:
+		void printTable(){
+			std::cout << "Multimap pairs contains:\nKey\tValue\n";
+			
+				// use const_iterator to walk through elements of pairs
+			for ( typename std::multimap< const char*, Value, ltstr >::const_iterator iter =mmap.begin();
+					 iter != mmap.end(); ++iter ){
+				std::cout << iter->first << '\t' << iter->second << '\n';
+			}
+			}
+	
             // ctor creates a new empty hashtable
      Hashtable() {}
 
