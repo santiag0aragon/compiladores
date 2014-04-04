@@ -45,7 +45,7 @@ Identifier::Identifier(yyltype loc, const char *n) : Node(loc) {
 }
 	// look for declaration from inner most scope to global scope
 Decl *Identifier::CheckIdDecl() {
-	printf("\n=========================Identifier::CheckIdDecl \n");
+		//printf("\n=========================Identifier::CheckIdDecl \n");
   Decl *decl = NULL;
   Node *parent = this->GetParent();
 
