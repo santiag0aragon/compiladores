@@ -1,0 +1,21 @@
+32,48c32
+< *** Error line 15.
+<   New(A);
+<       ^
+< *** No declaration found for class 'A'
+< 
+< 
+< *** Error line 16.
+<   New(Treat);
+<       ^^^^^
+< *** No declaration found for class 'Treat'
+< 
+< 
+< *** Error line 17.
+<   NewArray(10, Trick);
+<                ^^^^^
+< *** No declaration found for type 'Trick'
+< 
+---
+> *** Error line 15.
+\ No newline at end of file

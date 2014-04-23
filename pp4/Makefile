@@ -89,3 +89,13 @@ depend:
 clean:
 	rm -f $(JUNK) y.output $(PRODUCTS)
 
+test:
+	make
+	mkdir ./samples/diff &
+	mkdir ./samples/diff/DONE &
+	rm -r ./samples/diff/*.diff &
+	rm -r ./samples/diff/DONE/*.diff &
+	rm -r ./samples/*.test &
+	test-all.sh
+
+

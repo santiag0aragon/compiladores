@@ -1,0 +1,6 @@
+
+*** Error line 5.
+  return NewArray(d, int);
+  ^^^^^^
+*** Incompatible return:  given,  expected
+

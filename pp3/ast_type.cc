@@ -58,16 +58,31 @@ ArrayType::ArrayType(yyltype loc, Type *et) : Type(loc) {
 	Assert(et != NULL);
 	(elemType=et)->SetParent(this);
 }
-const char *ArrayType::GetTypeName() {
+const char* ArrayType::GetTypeName() {
   if (this->elemType)
     {
-		std::string delim = "[]";
-		std::string str = this->elemType->GetTypeName() + delim;
-		return str.c_str();
+		const char* d = "[]";
+		int newSize = strlen(this->elemType->GetTypeName()) +strlen(d);
+		char* newBuffer = (char *)malloc(newSize);
+		strcpy(newBuffer, this->elemType->GetTypeName());
+		strcat(newBuffer,d);
+		const char* str = newBuffer;
+			//std::string delim1 ("[]");
+			//PrintDebug("debug", "PRINTING %s","");
+			//std::string str2 = this->elemType->GetTypeName() + delim1;
+			//str2+= delim1;
+			//const char *str1 = str2.append(delim1).c_str();
+			//	return str.c_str();
+		PrintDebug("debug", "PRINTING %s",str);
+		return str;
     }
-  else
+  else{
+		PrintDebug("debug", "PRINTING NULL");
     return NULL;
+	}
 }
+
+
 
 
 bool ArrayType::IsEquivalentTo(Type *at) {

@@ -35,6 +35,7 @@
 
 #include <map>
 #include <string.h>
+#include <iostream>
 
 struct ltstr {
   bool operator()(const char* s1, const char* s2) const
@@ -50,6 +51,7 @@ template<class Value> class Hashtable {
      std::multimap<const char*, Value, ltstr> mmap;
  
    public:
+	
             // ctor creates a new empty hashtable
      Hashtable() {}
 
@@ -79,6 +81,16 @@ template<class Value> class Hashtable {
           // Returns an Iterator object (see below) that can be used to
           // visit each value in the table in alphabetical order.
      Iterator<Value> GetIterator();
+	
+	void printTable(){
+		std::cout<<"\nMultimap pairs contains:\nKey\tValue\n";
+		
+			// use const_iterator to walk through elements of pairs
+		for ( typename std::multimap< const char*, Value, ltstr >::const_iterator iter =mmap.begin();
+				 iter != mmap.end(); ++iter ){
+			std::cout << iter->first << '\t' << iter->second << '\n';
+		}
+	}
 
 };
 

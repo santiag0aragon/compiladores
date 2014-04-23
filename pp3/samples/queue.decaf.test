@@ -1,0 +1,112 @@
+
+*** Error line 9.
+    this.data = data;
+         ^^^^
+*** QueueItem has no such field 'data'
+
+
+*** Error line 10.
+    this.next = next;
+         ^^^^
+*** QueueItem has no such field 'next'
+
+
+*** Error line 11.
+    next.prev = this;
+         ^^^^
+*** QueueItem has no such field 'prev'
+
+
+*** Error line 12.
+    this.prev = prev;
+         ^^^^
+*** QueueItem has no such field 'prev'
+
+
+*** Error line 13.
+    prev.next = this;
+         ^^^^
+*** QueueItem has no such field 'next'
+
+
+*** Error line 16.
+    return this.data;
+                ^^^^
+*** QueueItem has no such field 'data'
+
+
+*** Error line 18.
+  QueueItem GetNext() { return next;}
+                               ^^^^
+*** No declaration found for variable 'next'
+
+
+*** Error line 19.
+  QueueItem GetPrev() { return prev;}
+                               ^^^^
+*** No declaration found for variable 'prev'
+
+
+*** Error line 20.
+  void SetNext(QueueItem n) { next = n;}
+                              ^^^^
+*** No declaration found for variable 'next'
+
+
+*** Error line 21.
+  void SetPrev(QueueItem p) { prev = p;}
+                              ^^^^
+*** No declaration found for variable 'prev'
+
+
+*** Error line 29.
+    this.head = New(QueueItem);
+         ^^^^
+*** Queue has no such field 'head'
+
+
+*** Error line 30.
+    this.head.Init(0, this.head, this.head);
+                           ^^^^
+*** Queue has no such field 'head'
+
+
+*** Error line 30.
+    this.head.Init(0, this.head, this.head);
+                                      ^^^^
+*** Queue has no such field 'head'
+
+
+*** Error line 30.
+    this.head.Init(0, this.head, this.head);
+         ^^^^
+*** Queue has no such field 'head'
+
+
+*** Error line 35.
+    temp.Init(i, this.head.GetNext(), this.head);
+                      ^^^^
+*** Queue has no such field 'head'
+
+
+*** Error line 35.
+    temp.Init(i, this.head.GetNext(), this.head);
+                                           ^^^^
+*** Queue has no such field 'head'
+
+
+*** Error line 39.
+    if (this.head.GetPrev() == this.head) {
+             ^^^^
+*** Queue has no such field 'head'
+
+
+*** Error line 39.
+    if (this.head.GetPrev() == this.head) {
+                                    ^^^^
+*** Queue has no such field 'head'
+
+
+*** Failure: Assertion failed: ast_type.cc, line 30:
+    n
+

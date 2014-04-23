@@ -93,7 +93,7 @@ void ReportError::OverrideMismatch(Decl *fnDecl) {
 
 void ReportError::InterfaceNotImplemented(Decl *cd, Type *interfaceType) {
     stringstream s;
-    s << "Class '" << cd << "' does not implement entire interface '" << interfaceType << "'" << '\0';
+    s << "Class '" << cd << "' does not implement entire interface '" << interfaceType << "'" ;
     OutputError(interfaceType->GetLocation(), s.str());
 }
 
@@ -110,7 +110,13 @@ void ReportError::IncompatibleOperands(Operator *op, Type *lhs, Type *rhs) {
     s << "Incompatible operands: " << lhs << " " << op << " " << rhs;
     OutputError(op->GetLocation(), s.str());
 }
-     
+
+void ReportError::IncompatibleOperands(Operator *op, const char *lhs, const char *rhs) {
+	stringstream s;
+	s << "Incompatible operands: " << lhs  << " " << op << " " << rhs ;
+	OutputError(op->GetLocation(), s.str());
+}
+
 void ReportError::IncompatibleOperand(Operator *op, Type *rhs) {
     stringstream s;
     s << "Incompatible operand: " << op << " " << rhs;
@@ -142,7 +148,7 @@ void ReportError::NumArgsMismatch(Identifier *fnIdent, int numExpected, int numG
 
 void ReportError::ArgMismatch(Expr *arg, int argIndex, Type *given, Type *expected) {
   stringstream s;
-  s << "Incompatible argument " << argIndex << ": " << given << " given, " << expected << " expected" << '\0';
+  s << "Incompatible argument " << argIndex << ": " << given << " given, " << expected << " expected";
   OutputError(arg->GetLocation(), s.str());
 }
 

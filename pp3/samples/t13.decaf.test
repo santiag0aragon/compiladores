@@ -1,0 +1,30 @@
+
+*** Error line 12.
+     this.red = red;
+          ^^^
+*** Color has no such field 'red'
+
+
+*** Error line 13.
+     this.green = green;
+          ^^^^^
+*** Color has no such field 'green'
+
+
+*** Error line 14.
+     this.blue = blue;
+          ^^^^
+*** Color has no such field 'blue'
+
+
+*** Error line 20.
+  Color GetColor() { return myColor; }
+                            ^^^^^^^
+*** No declaration found for variable 'myColor'
+
+
+*** Error line 21.
+  void SetColor(Color c) { myColor = c;}
+                           ^^^^^^^
+*** No declaration found for variable 'myColor'
+

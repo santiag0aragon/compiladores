@@ -79,7 +79,8 @@ void StmtBlock::Check(){
 	      else
 					{
 					scope_table->Enter(name, cur);
-					//printf("=====================StmtBlock::CHECK Enter\n");
+						//scope_table->printTable();
+					PrintDebug("debug","=====================StmtBlock::CHECK Enter\n");
 					cur->Check();
 						
 					}

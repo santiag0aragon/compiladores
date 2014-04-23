@@ -56,8 +56,9 @@ template<class Value> class Hashtable {
 				// use const_iterator to walk through elements of pairs
 			for ( typename std::multimap< const char*, Value, ltstr >::const_iterator iter =mmap.begin();
 					 iter != mmap.end(); ++iter ){
-				std::cout << iter->first << '\t' << iter->second << '\n';
+					std::cout << iter->first << '\t' << iter->second << '\n';
 			}
+
 			}
 	
             // ctor creates a new empty hashtable

@@ -1,21 +1,18 @@
-interface Comparable {
-  bool equals(Comparable other);
-  Streamable GetStream();
-}
-
-interface Streamable {
-   void Stream(int a);
-}
-
-class Ruler implements Streamable,Comparable {
-   void Stream(int b) {}
-   bool equals(Comparable other) { return false; }
-   Streamable GetStream() { return this; }
+int Binky(int a, int[] b, int[] c)
+{
+  return b[c[0]];
 }
 
 void main()
 {
-    Comparable c;
-    Streamable[] s;
-    Ruler r;
+  int[] c;
+  int [][]d;
+
+  d = NewArray(5, int[]);
+  d[0] = NewArray(12, int);
+  c = NewArray(10, int);
+  c[0] = 4 + 5 * 3 / 4 % 2;
+  d[0][c[0]] = 55;
+
+  Print(c[0], " ", 2 * Binky(100, d[0], c));
 }

@@ -152,9 +152,11 @@ void LogicalExpr::Check() {
 }
 
 void AssignExpr::Check() {
+	PrintDebug("debug","Checking left %s \n",this->left->GetPrintNameForNode());
   this->left->Check();
+	PrintDebug("debug","Checking right%s\n",this->left->GetPrintNameForNode());
   this->right->Check();
-  const char *lt = this->left->GetTypeName();
+	const char *lt = this->left->GetTypeName();
   const char *rt = this->right->GetTypeName();
 	
   if (lt && rt)
@@ -177,7 +179,8 @@ void AssignExpr::Check() {
 			return;
 		else if (!strcmp(lt, rt)) // non-objects
 			return;
-		ReportError::IncompatibleOperands(this->op, new Type(lt), new Type(rt));
+		PrintDebug("debug","rt:%s lt:'%s' \n", rt,lt);
+		ReportError::IncompatibleOperands(this->op, new Type(lt),new Type(rt));
     }
 }
 
@@ -216,6 +219,7 @@ const char *ArrayAccess::GetTypeName() {
 }
 
 void ArrayAccess::Check() {
+		//PrintDebug("debug", "=====================Array Access::CHECK\n");
   this->base->Check();
   if (typeid(*this->base->GetType()) != typeid(ArrayType))
     ReportError::BracketsOnNonArray(this->base);
@@ -231,17 +235,49 @@ FieldAccess::FieldAccess(Expr *b, Identifier *f)
 	if (base) base->SetParent(this);
 	(field=f)->SetParent(this);
 }
+/*
+Type* FieldAccess::GetType() {
+	
+	if (this->base != NULL) {
+		return   base->GetType();
+	}
+	else{
+		Decl *d;
+		d= this->field->CheckIdDecl();
+		if (d == NULL)
+			return Type::errorType;
+	if (dynamic_cast<VarDecl*>(d) == NULL)
+		return Type::errorType;
 
-
+	return static_cast<VarDecl*>(d)->GetType();
+	}
+}
+*/
+const char *FieldAccess::GetTypeName()
+{
+	PrintDebug("debug", "=====================FieldAccess::GETypeName\n");
+	
+	if (this->type){
+		PrintDebug("debug", "=====================FieldAccess::GETypeName IF \n");
+			//		Decl *decl = this->field->CheckIdDecl();
+			//const char *typeName = decl->GetTypeName();
+		PrintDebug("debug","====================FieldAccessGETtypeName type:%s",this->type->GetTypeName());
+		return this->type->GetTypeName();
+	}
+	else{
+		PrintDebug("debug", "=====================FieldAccess::GETypeName ELSE\n");
+		return NULL;
+	}
+}
 
 void FieldAccess::Check() {
-  //printf("=====================FieldAccess::CHECK \n");
+		PrintDebug("debug","=====================FieldAccess::CHECK \n");
   Decl *decl = NULL; // to keep the result of looking up the symbol table
   if (this->base)
     {
 		this->base->Check();  // whether base is declared
 		const char *name = this->base->GetTypeName();
-		
+
 		if (name)
 			{
 			Node *parent = this->GetParent();
@@ -277,9 +313,11 @@ void FieldAccess::Check() {
 		}
   else
     {
+				
       // no base, just check whether the field is declared
-			//Decl* decl = Program::global_table->Lookup(this->name);
-		//printf("===========================Identifier::CheckIdDecl  %s",this->field->GetName());
+		parent = this->GetParent()->GetParent();
+		if(parent != NULL){
+		}
 		decl = this->field->CheckIdDecl();
 		if (decl == NULL || typeid(*decl) != typeid(VarDecl))
 			{
@@ -292,6 +330,9 @@ void FieldAccess::Check() {
   if (decl != NULL)
     this->type = decl->GetType();
 }
+
+
+
 Call::Call(yyltype loc, Expr *b, Identifier *f, List<Expr*> *a) : Expr(loc)  {
 	Assert(f != NULL && a != NULL); // b can be be NULL (just means no explicit base)
 	base = b;
@@ -345,6 +386,8 @@ void Call::CheckArguments(FnDecl *fndecl) {
 }
 
 void Call::Check() {
+	
+	PrintDebug("debug", "==================CALL::CHECK");
   if (this->actuals)
     {
 		for (int i = 0; i < actuals->NumElements(); i++)
@@ -396,6 +439,10 @@ void Call::Check() {
   if (decl != NULL)
     this->type = decl->GetType(); // returnType
 }
+
+
+
+
 NewExpr::NewExpr(yyltype loc, NamedType *c) : Expr(loc) {
   Assert(c != NULL);
   (cType=c)->SetParent(this);
@@ -421,11 +468,14 @@ NewArrayExpr::NewArrayExpr(yyltype loc, Expr *sz, Type *et) : Expr(loc) {
 }
 
 const char *NewArrayExpr::GetTypeName() {
-  if (this->elemType)
+	if (this->elemType)
     {
 		std::string delim = "[]";
-		std::string str = this->elemType->GetTypeName() + delim;
-		return str.c_str();
+		std::string str = this->elemType->GetTypeName();// + delim;
+		str = str.append(delim);
+			//		const char *arrType = str.c_str();
+			//PrintDebug("debug", "ArrayType: %s\n",arrType);
+		return str.c_str();;
     }
   else
     return NULL;

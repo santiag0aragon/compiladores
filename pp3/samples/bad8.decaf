@@ -1,15 +1,26 @@
-class X {
-   int a;
-   void f(int y) {}
-   bool f(int[] a) {}
-   void g(int y) {}
+class Car {
+  int wheels;
+  void Drive() { }
 }
 
-class Y extends X {
-   int a;
-   void g(int z) {}
+class Honda extends Car {
+  int trunk;
+   bool Park() { return trunk == wheels;}
 }
+
+class Boat {}
 
 void main() {
-  Y test;
+  Honda red;
+  Boat blue;
+
+  red = New(Honda);
+  red.wheels = 2;
+  if (red.Park()) 
+      red.horn = 1.0;
+  red.Honk();
+  red = (blue < red && blue == null);
 }
+
+
+

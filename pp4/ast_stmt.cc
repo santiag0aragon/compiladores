@@ -16,7 +16,9 @@ Program::Program(List<Decl*> *d) {
 }
 
 void Program::Check() {
+	 	PrintDebug("debug","INICIO\n");
     nodeScope = new Scope();
+		//		nodeScope->Print();
     decls->DeclareAll(nodeScope);
     decls->CheckAll();
 }

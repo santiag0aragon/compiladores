@@ -1,0 +1,67 @@
+
+*** Error line 7.
+    seed = seedVal;
+    ^^^^
+*** No declaration found for variable 'seed'
+
+
+*** Error line 11.
+    seed = (15625 * (seed % 10000) + 22221) % 65536;
+    ^^^^
+*** No declaration found for variable 'seed'
+
+
+*** Error line 11.
+    seed = (15625 * (seed % 10000) + 22221) % 65536;
+                     ^^^^
+*** No declaration found for variable 'seed'
+
+
+*** Error line 12.
+    return seed;
+           ^^^^
+*** No declaration found for variable 'seed'
+
+
+*** Error line 16.
+    return (GenRandom() % max);
+            ^^^^^^^^^
+*** No declaration found for function 'GenRandom'
+
+
+*** Error line 29.
+    cards = NewArray(52, int);
+    ^^^^^
+*** No declaration found for variable 'cards'
+
+
+*** Error line 33.
+    for (current = 0; current < 52; current = current + 1) {
+         ^^^^^^^
+*** No declaration found for variable 'current'
+
+
+*** Error line 33.
+    for (current = 0; current < 52; current = current + 1) {
+                                    ^^^^^^^
+*** No declaration found for variable 'current'
+
+
+*** Error line 33.
+    for (current = 0; current < 52; current = current + 1) {
+                                              ^^^^^^^
+*** No declaration found for variable 'current'
+
+
+*** Error line 33.
+    for (current = 0; current < 52; current = current + 1) {
+                      ^^^^^^^
+*** No declaration found for variable 'current'
+
+
+*** Error line 34.
+      cards[current] = (current + 1) % 13;
+      ^^^^^
+*** No declaration found for variable 'cards'
+
+libc++abi.dylib: terminating with uncaught exception of type std::bad_typeid: std::bad_typeid

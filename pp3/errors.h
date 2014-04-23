@@ -73,6 +73,7 @@ class ReportError
   
   // Errors used by semantic analyzer for expressions
   static void IncompatibleOperand(Operator *op, Type *rhs); // unary
+  static void IncompatibleOperands(Operator *op, const char *lhs, const char *rhs); // binary
   static void IncompatibleOperands(Operator *op, Type *lhs, Type *rhs); // binary
   static void ThisOutsideClassScope(This *th);
 

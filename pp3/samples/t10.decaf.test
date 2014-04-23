@@ -1,0 +1,24 @@
+
+*** Error line 18.
+       color = 5 % 2;
+       ^^^^^
+*** No declaration found for variable 'color'
+
+
+*** Error line 19.
+       Print("Yum! ", color, "\n");
+                      ^^^^^
+*** No declaration found for variable 'color'
+
+
+*** Error line 20.
+       veg.Grow(s, w);
+           ^^^^
+*** Vegetable has no such field 'Grow'
+
+
+*** Error line 27.
+      Eat(this);
+      ^^^
+*** No declaration found for function 'Eat'
+

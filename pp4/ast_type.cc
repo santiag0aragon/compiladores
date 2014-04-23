@@ -29,8 +29,6 @@ Type::Type(const char *n) {
     typeName = strdup(n);
 }
 
-
-
 	
 NamedType::NamedType(Identifier *i) : Type(*i->GetLocation()) {
     Assert(i != NULL);
@@ -46,10 +44,15 @@ void NamedType::Check() {
 Decl *NamedType::GetDeclForType() {
     if (!cachedDecl && !isError) {
         Decl *declForName = FindDecl(id);
-        if (declForName && (declForName->IsClassDecl() || declForName->IsInterfaceDecl())) 
+        if (declForName && (declForName->IsFnDecl() || declForName->IsClassDecl() || declForName->IsInterfaceDecl()))
             cachedDecl = declForName;
     }
     return cachedDecl;
+}
+
+bool NamedType::IsFn() {
+	Decl *d = GetDeclForType();
+	return (d && d->IsFnDecl());
 }
 
 bool NamedType::IsInterface() {

@@ -136,7 +136,7 @@ class RelationalExpr : public CompoundExpr
   public:
     RelationalExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     void Check();
-    //Type *GetType() { return Type::boolType; }
+    Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
     const char *GetPrintNameForNode() { return "RelationalExpr"; }
 
@@ -148,7 +148,7 @@ class EqualityExpr : public CompoundExpr
     EqualityExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     const char *GetPrintNameForNode() { return "EqualityExpr"; }
     void Check();
-    //Type *GetType() { return Type::boolType; }
+    Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
     
 };
@@ -159,7 +159,7 @@ class LogicalExpr : public CompoundExpr
     LogicalExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     LogicalExpr(Operator *op, Expr *rhs) : CompoundExpr(op,rhs) {}
     void Check();
-    //Type *GetType() { return Type::boolType; }
+    Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
     const char *GetPrintNameForNode() { return "LogicalExpr"; }
 
@@ -220,9 +220,10 @@ class FieldAccess : public LValue
     FieldAccess(Expr *base, Identifier *field); //ok to pass NULL base
     void Check(); // its type is decided here
     Identifier *GetField() { return field; }
-    Type *GetType() { return type; }
-    const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
-    const char *GetPrintNameForNode() { return "FieldAccess"; }
+		Type *GetType(){return this->type;}
+    //const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
+	const char *GetTypeName();
+	const char *GetPrintNameForNode() { return "FieldAccess"; }
     void PrintChildren(int indentLevel);
 };
 
@@ -270,7 +271,9 @@ class NewArrayExpr : public Expr
   public:
     NewArrayExpr(yyltype loc, Expr *sizeExpr, Type *elemType);
     void Check();
-    const char *GetTypeName();
+		//const char *GetTypeName(){if (elemType) return elemType->GetTypeName(); else return NULL; };
+		const char *GetTypeName();
+		Type *GetType() { return elemType ;}
     const char *GetPrintNameForNode() { return "NewArrayExpr"; }
     void PrintChildren(int indentLevel);
 

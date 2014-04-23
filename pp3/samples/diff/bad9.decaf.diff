@@ -1,0 +1,16 @@
+16c16
+<                  ^^^^^^
+---
+>                  ^^
+23,30c23
+< *** No declaration found for variable 'main'
+< 
+< 
+< *** Error line 11.
+<      Print(arr[a], a.length());
+<                      ^^^^^^
+< *** int has no such field 'length'
+< 
+---
+> *** No declaration found for variable 'main'
+\ No newline at end of file

@@ -1,0 +1,16 @@
+
+*** Error line 8.
+   bool Park() { return trunk == wheels;}
+                        ^^^^^
+*** No declaration found for variable 'trunk'
+
+
+*** Error line 8.
+   bool Park() { return trunk == wheels;}
+                                 ^^^^^^
+*** No declaration found for variable 'wheels'
+
+
+*** Failure: Assertion failed: ast_type.cc, line 30:
+    n
+

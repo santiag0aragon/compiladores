@@ -31,6 +31,9 @@ Decl *Node::FindDecl(Identifier *idToFind, lookup l) {
         return parent->FindDecl(idToFind, l);
     return NULL;
 }
+
+
+
 	 
 Identifier::Identifier(yyltype loc, const char *n) : Node(loc) {
     name = strdup(n);

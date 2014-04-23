@@ -20,7 +20,10 @@ class Type : public Node
     char *typeName;
 
   public :
-    static Type *intType, *doubleType, *boolType, *voidType,
+	
+		virtual const char *GetTypeName() { return typeName; }
+  
+		static Type *intType, *doubleType, *boolType, *voidType,
                 *nullType, *stringType, *errorType;
 
     Type(yyltype loc) : Node(loc) {}
@@ -40,12 +43,15 @@ class NamedType : public Type
     
   public:
     NamedType(Identifier *i);
-    
+  
+		const char *GetTypeName() { if (id) return id->GetName(); else return NULL; }
+	
     void PrintToStream(std::ostream& out) { out << id; }
     void Check();
     Decl *GetDeclForType();
     bool IsInterface();
     bool IsClass();
+		bool IsFn();
     Identifier *GetId() { return id; }
     bool IsEquivalentTo(Type *other);
 };

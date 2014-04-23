@@ -1,17 +1,13 @@
-class Shape {
-  int a;
-}
-
-class Block {
-   int b;
-}
-
-class Block {
-   int c;
+class Crayon {
+  int color;
 }
 
 void main() {
-  ABlock[] test;
-}
+  Crayon blue;
+  int[] pens;
 
-int Shape;
+  blue = this;
+  pens = NewArray(2, int);
+  blue.color = 10;
+  pens.color = 5;
+}

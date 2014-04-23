@@ -1,23 +1,14 @@
-class Derived extends Base {
-    string field;
-    int Method1(int a, double b) {}
-    int Method2(int[] a, Base c, double d) {}
-}
+void main() {
+  int a;
+  
+  if (a != 10 && 5) {
+    a = 10;
+    break;
+  } else if (!a) 
+    a = 12;
 
-class Base implements Binkyable {
-    string field2;
-    int Method1(int a, double b) {}
-    int Method2(int[] a, Base c) {}
-    void Method3(bool a) {}
-}
-
-interface Binkyable
-{
-    void Method3(string a);
-}
-
-void main()
-{
-	Base b;
-	Derived c;
+  for (a = 0; a + 10 * 5; a = a + 1) {
+	a = -a;
+  }
+  return a;
 }

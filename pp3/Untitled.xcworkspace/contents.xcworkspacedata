@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:ast_decl.cc">
+   </FileRef>
+   <FileRef
+      location = "group:ast_decl.h">
+   </FileRef>
+   <FileRef
+      location = "group:ast_expr.cc">
+   </FileRef>
+   <FileRef
+      location = "group:ast_expr.h">
+   </FileRef>
+   <FileRef
+      location = "group:ast_stmt.cc">
+   </FileRef>
+   <FileRef
+      location = "group:ast_stmt.h">
+   </FileRef>
+   <FileRef
+      location = "group:ast_type.cc">
+   </FileRef>
+   <FileRef
+      location = "group:ast_type.h">
+   </FileRef>
+   <FileRef
+      location = "group:ast.cc">
+   </FileRef>
+   <FileRef
+      location = "group:ast.h">
+   </FileRef>
+   <FileRef
+      location = "group:errors.cc">
+   </FileRef>
+   <FileRef
+      location = "group:errors.h">
+   </FileRef>
+   <FileRef
+      location = "group:hashtable.cc">
+   </FileRef>
+   <FileRef
+      location = "group:hashtable.h">
+   </FileRef>
+   <FileRef
+      location = "group:list.h">
+   </FileRef>
+   <FileRef
+      location = "group:location.h">
+   </FileRef>
+   <FileRef
+      location = "group:main.cc">
+   </FileRef>
+   <FileRef
+      location = "group:Makefile">
+   </FileRef>
+   <FileRef
+      location = "group:parser_original.y">
+   </FileRef>
+   <FileRef
+      location = "group:parser.h">
+   </FileRef>
+   <FileRef
+      location = "group:parser.y">
+   </FileRef>
+   <FileRef
+      location = "group:samples">
+   </FileRef>
+   <FileRef
+      location = "group:scanner.h">
+   </FileRef>
+   <FileRef
+      location = "group:scanner.l">
+   </FileRef>
+   <FileRef
+      location = "group:utility.cc">
+   </FileRef>
+   <FileRef
+      location = "group:utility.h">
+   </FileRef>
+   <FileRef
+      location = "group:y.output">
+   </FileRef>
+   <FileRef
+      location = "group:y.tab.c">
+   </FileRef>
+   <FileRef
+      location = "group:y.tab.h">
+   </FileRef>
+</Workspace>

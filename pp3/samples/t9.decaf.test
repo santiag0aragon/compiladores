@@ -1,0 +1,42 @@
+
+*** Error line 9.
+    this.height = h;
+         ^^^^^^
+*** Animal has no such field 'height'
+
+
+*** Error line 10.
+    mother = mom;
+    ^^^^^^
+*** No declaration found for variable 'mother'
+
+
+*** Error line 14.
+    return height;
+           ^^^^^^
+*** No declaration found for variable 'height'
+
+
+*** Error line 18.
+    return this.mother;
+                ^^^^^^
+*** Animal has no such field 'mother'
+
+
+*** Error line 25.
+    isSpotted = spot;
+    ^^^^^^^^^
+*** No declaration found for variable 'isSpotted'
+
+
+*** Error line 26.
+    InitAnimal(h,m);
+    ^^^^^^^^^^
+*** No declaration found for function 'InitAnimal'
+
+
+*** Error line 29.
+    return isSpotted;
+           ^^^^^^^^^
+*** No declaration found for variable 'isSpotted'
+

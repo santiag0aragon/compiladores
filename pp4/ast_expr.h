@@ -13,13 +13,16 @@
 #include "ast.h"
 #include "ast_stmt.h"
 #include "list.h"
+#include "ast_decl.h"
+#include "ast_type.h"
 
-class NamedType; // for new
-class Type; // for NewArray
 
 
 class Expr : public Stmt 
 {
+	protected:
+	Type *type;
+	
   public:
     Expr(yyltype loc) : Stmt(loc) {}
     Expr() : Stmt() {}
@@ -181,6 +184,11 @@ class Call : public Expr
     
   public:
     Call(yyltype loc, Expr *base, Identifier *field, List<Expr*> *args);
+		void CheckArguments(FnDecl *fndecl); // check arguments against formal parameters
+		void CheckStatements(); // its type is decided here
+		Type *GetType() { return type; }
+		const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
+	
 };
 
 class NewExpr : public Expr

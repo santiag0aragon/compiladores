@@ -33,7 +33,7 @@ void VarDecl::PrintChildren(int indentLevel) {
 }
 	// check NamedType errors
 void VarDecl::Check() {
-	//printf("=====================VarDecl::CHECK type : %s\n",this->type->GetName());
+		//printf("=====================VarDecl::CHECK type : %s\n",this->type->GetName());
   if (this->type){
     this->type->CheckTypeError();
 	}
@@ -50,7 +50,7 @@ ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<D
 	this->scope_table = new Hashtable<Decl*>;
 }
 void ClassDecl::Check() {
-			//printf("=====================ClassDecl::CHECK \n");
+		//	printf("=====================ClassDecl::CHECK \n");
   if (this->members)
     {
 		for (int i = 0; i < this->members->NumElements(); i++){
@@ -59,11 +59,9 @@ void ClassDecl::Check() {
 		}
     }
 	
-	
 		// add itself to the symbol table
   this->scope_table->Enter(this->GetID()->GetName(), this);
-	
-		// check decl conflicts of its members and add the decl to symbol table if no errors
+	// check decl conflicts of its members and add the decl to symbol table if no errors
   if (this->members)
     {
 		for (int i = 0; i < this->members->NumElements(); i++)
@@ -78,8 +76,9 @@ void ClassDecl::Check() {
 				//printf("=====================ClassDecl::node==null stms\n");					
 				}
 				
-	      else
+	      else{
 					this->scope_table->Enter(name, cur);
+				}
 				}
 			}
     }
