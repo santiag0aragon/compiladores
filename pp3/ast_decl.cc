@@ -199,7 +199,7 @@ void ClassDecl::CheckDecl() {
     }
 }
 
-void ClassDecl::PrintChildren(int indentLevel) 
+void ClassDecl::PrintChildren(int indentLevel) {
 	id->Print(indentLevel+1);
 	if (extends) extends->Print(indentLevel+1, "(extends) ");
 	implements->PrintAll(indentLevel+1, "(implements) ");
