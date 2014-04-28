@@ -53,7 +53,8 @@ class Node
     yyltype *GetLocation()   { return location; }
     void SetParent(Node *p)  { parent = p; }
     Node *GetParent()        { return parent; }
-    virtual void Check(){}
+    virtual void CheckDecl() {}
+    virtual void CheckStmts() {}
     virtual Hashtable<Decl*>* GetScopeTable() {return NULL;}
     void Print(int indentLevel, const char *label=NULL);
 

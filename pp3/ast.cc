@@ -69,7 +69,7 @@ Decl *Identifier::CheckIdDecl() {
 		parent = parent->GetParent();
     }
 	
-  decl = Program::global_table->Lookup(this->name);
+  decl = Program::scope_table->Lookup(this->name);
 	//printf("===========================Identifier::CheckIdDecl seaching global table name: %s, decl: %s \n",this->name,decl);
 	
   return decl;

@@ -35,30 +35,6 @@
 *** QueueItem has no such field 'data'
 
 
-*** Error line 18.
-  QueueItem GetNext() { return next;}
-                               ^^^^
-*** No declaration found for variable 'next'
-
-
-*** Error line 19.
-  QueueItem GetPrev() { return prev;}
-                               ^^^^
-*** No declaration found for variable 'prev'
-
-
-*** Error line 20.
-  void SetNext(QueueItem n) { next = n;}
-                              ^^^^
-*** No declaration found for variable 'next'
-
-
-*** Error line 21.
-  void SetPrev(QueueItem p) { prev = p;}
-                              ^^^^
-*** No declaration found for variable 'prev'
-
-
 *** Error line 29.
     this.head = New(QueueItem);
          ^^^^
@@ -107,6 +83,8 @@
 *** Queue has no such field 'head'
 
 
-*** Failure: Assertion failed: ast_type.cc, line 30:
-    n
+*** Error line 44.
+      temp = this.head.GetPrev();
+                  ^^^^
+*** Queue has no such field 'head'
 

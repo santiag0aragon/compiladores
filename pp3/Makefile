@@ -97,6 +97,9 @@ test:
 	rm -r ./samples/*.test &
 	test-all.sh
 
+single_test:
+	./dcc -d scope debug < ./samples/t13.decaf
+
 # DO NOT DELETE
 
 ast.o: ast.h /usr/include/stdlib.h /usr/include/Availability.h

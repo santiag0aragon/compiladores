@@ -56,15 +56,15 @@ CompoundExpr::CompoundExpr(Operator *o, Expr *r)
 }
 
 
-void ArithmeticExpr::Check() {
+void ArithmeticExpr::CheckStmts() {
   const char *lt = NULL, *rt = NULL;
   if (this->left) // binary
     {
-		this->left->Check();
+		this->left->CheckStmts();
 		lt = this->left->GetTypeName();
     }
 	
-  this->right->Check();
+  this->right->CheckStmts();
   rt = this->right->GetTypeName();
   if (lt && rt) // binary
     {
@@ -80,10 +80,10 @@ void ArithmeticExpr::Check() {
     }
 }
 
-void RelationalExpr::Check() {
-  this->left->Check();
+void RelationalExpr::CheckStmts() {
+  this->left->CheckStmts();
   const char *lt = this->left->GetTypeName();
-  this->right->Check();
+  this->right->CheckStmts();
   const char *rt = this->right->GetTypeName();
   if (lt && rt) // binary
     {
@@ -94,15 +94,15 @@ void RelationalExpr::Check() {
     }
 }
 
-void EqualityExpr::Check() {
-  this->left->Check();
-  this->right->Check();
+void EqualityExpr::CheckStmts() {
+  this->left->CheckStmts();
+  this->right->CheckStmts();
   const char *lt = this->left->GetTypeName();
   const char *rt = this->right->GetTypeName();
   if (lt && rt)
     {
-		Decl *ldecl = Program::global_table->Lookup(lt);
-		Decl *rdecl = Program::global_table->Lookup(rt);
+		Decl *ldecl = Program::scope_table->Lookup(lt);
+		Decl *rdecl = Program::scope_table->Lookup(rt);
 		
 		if (ldecl && rdecl) // objects
 			{
@@ -129,14 +129,14 @@ void EqualityExpr::Check() {
   ReportError::IncompatibleOperands(this->op, new Type(lt), new Type(rt));
 }
 
-void LogicalExpr::Check() {
+void LogicalExpr::CheckStmts() {
   const char *lt = NULL, *rt = NULL;
   if (this->left)
     {
-		this->left->Check();
+		this->left->CheckStmts();
 		lt = this->left->GetTypeName();
     }
-  this->right->Check();
+  this->right->CheckStmts();
   rt = this->right->GetTypeName();
   if (lt && rt)
     {
@@ -151,18 +151,18 @@ void LogicalExpr::Check() {
 	
 }
 
-void AssignExpr::Check() {
-	PrintDebug("debug","Checking left %s \n",this->left->GetPrintNameForNode());
-  this->left->Check();
+void AssignExpr::CheckStmts() {
+	PrintDebug("debug","CheckStmts  left %s \n",this->left->GetPrintNameForNode());
+  this->left->CheckStmts();
 	PrintDebug("debug","Checking right%s\n",this->left->GetPrintNameForNode());
-  this->right->Check();
+  this->right->CheckStmts();
 	const char *lt = this->left->GetTypeName();
   const char *rt = this->right->GetTypeName();
 	
   if (lt && rt)
     {
-		Decl *ldecl = Program::global_table->Lookup(lt);
-		Decl *rdecl = Program::global_table->Lookup(rt);
+		Decl *ldecl = Program::scope_table->Lookup(lt);
+		Decl *rdecl = Program::scope_table->Lookup(rt);
 		
 		if (ldecl && rdecl) // objects
 			{
@@ -184,8 +184,10 @@ void AssignExpr::Check() {
     }
 }
 
-void This::Check() {
+void This::CheckStmts() {
+
   Node *parent = this->GetParent();
+	
   while (parent)
     {
 		if (typeid(*parent) == typeid(ClassDecl))
@@ -193,10 +195,16 @@ void This::Check() {
 			this->type = new NamedType(dynamic_cast<ClassDecl*>(parent)->GetID());
 			return;
 			}
+		PrintDebug("debug","Checking this parent%s \n",parent->GetPrintNameForNode());
+		//Hashtable<Decl*> *scope_table = parent->GetScopeTable();
+			//	if(scope_table)
+			//	scope_table->printTable(); //uncomment
 		parent = parent->GetParent();
     }
   ReportError::ThisOutsideClassScope(this);
 }
+
+
 ArrayAccess::ArrayAccess(yyltype loc, Expr *b, Expr *s) : LValue(loc) {
 	(base=b)->SetParent(this);
 	(subscript=s)->SetParent(this);
@@ -218,12 +226,12 @@ const char *ArrayAccess::GetTypeName() {
     return NULL;
 }
 
-void ArrayAccess::Check() {
+void ArrayAccess::CheckStmts() {
 		//PrintDebug("debug", "=====================Array Access::CHECK\n");
-  this->base->Check();
+  this->base->CheckStmts();
   if (typeid(*this->base->GetType()) != typeid(ArrayType))
     ReportError::BracketsOnNonArray(this->base);
-  this->subscript->Check();
+  this->subscript->CheckStmts();
   if (strcmp(this->subscript->GetTypeName(), "int"))
     ReportError::SubscriptNotInteger(this->subscript);
 }
@@ -270,13 +278,14 @@ const char *FieldAccess::GetTypeName()
 	}
 }
 
-void FieldAccess::Check() {
+void FieldAccess::CheckStmts() {
 		PrintDebug("debug","=====================FieldAccess::CHECK \n");
   Decl *decl = NULL; // to keep the result of looking up the symbol table
   if (this->base)
     {
-		this->base->Check();  // whether base is declared
+		this->base->CheckStmts();  // whether base is declared
 		const char *name = this->base->GetTypeName();
+		PrintDebug("debug","=====================FieldAccess::CHECK base typename %s\n",name);
 
 		if (name)
 			{
@@ -287,27 +296,42 @@ void FieldAccess::Check() {
 			while (parent)
 				{
 	      Hashtable<Decl*> *scope_table = parent->GetScopeTable();
-	      if (scope_table)
+				/*if(scope_table){
+					PrintDebug("debug","=====================FieldAccess::Printing scope table for ...\n");
+											parent->Print(1); //uncomment
+					PrintDebug("debug","\n===================================\n");
+						scope_table->printTable();  //uncomment
+				}
+				*/
+				if (scope_table)
 					if ((cldecl = scope_table->Lookup(name)) != NULL)
 						{
+						PrintDebug("debug", "=====================FieldAccess:: Trying %s",cldecl->GetID());
 						decl = this->field->CheckIdDecl(cldecl->GetScopeTable(), this->field->GetName());
 						if ((decl == NULL) || (typeid(*decl) != typeid(VarDecl)))
+							PrintDebug("debug","=====================FieldAccess::Error 1 \n");
 							ReportError::FieldNotFoundInBase(this->field, new Type(name));
 						}
 	      parent = parent->GetParent();
 				}
+			
 			if (cldecl == NULL)
 				{
-	      if ((cldecl = Program::global_table->Lookup(name)) != NULL) // look up global symbol table
+	      if ((cldecl = Program::scope_table->Lookup(name)) != NULL) // look up global symbol table
 	        {
 					decl = this->field->CheckIdDecl(cldecl->GetScopeTable(), this->field->GetName());
-					if ((decl != NULL) && (typeid(*decl) == typeid(VarDecl)))
+					if ((decl != NULL) && (typeid(*decl) == typeid(VarDecl))){
 						ReportError::InaccessibleField(this->field, new Type(name)); // data member is private
-					else
+						PrintDebug("debug","=====================FieldAccess::Error 2 \n");
+					}else{
 						ReportError::FieldNotFoundInBase(this->field, new Type(name)); // no such field
+						PrintDebug("debug","=====================FieldAccess::Error 3 \n");
+					}
 	        }
-	      else // for those with no symbol tables, e.g. int[]
+	      else{ // for those with no symbol tables, e.g. int[]
+					PrintDebug("debug","=====================FieldAccess::Error 4 \n");
 					ReportError::FieldNotFoundInBase(this->field, new Type(name));
+				}
 				}
 			}
 		}
@@ -315,13 +339,13 @@ void FieldAccess::Check() {
     {
 				
       // no base, just check whether the field is declared
-		parent = this->GetParent()->GetParent();
-		if(parent != NULL){
-		}
+		//parent = this->GetParent()->GetParent();
+		//if(parent != NULL){
+		//}
 		decl = this->field->CheckIdDecl();
 		if (decl == NULL || typeid(*decl) != typeid(VarDecl))
 			{
-			//printf("=====================FieldAccess::NOT FOUND IN GLOBAL %s \n",decl);
+			PrintDebug("debug","=====================FieldAccess::NOT FOUND IN GLOBAL %s \n",decl);
 			ReportError::IdentifierNotDeclared(this->field, LookingForVariable);
 			decl = NULL; // to force not to get the type
 									 // and avoid cascading error reports
@@ -363,8 +387,8 @@ void Call::CheckArguments(FnDecl *fndecl) {
 			
 			if (given && expected)
 				{
-				Decl *gdecl = Program::global_table->Lookup(given);
-				Decl *edecl = Program::global_table->Lookup(expected);
+				Decl *gdecl = Program::scope_table->Lookup(given);
+				Decl *edecl = Program::scope_table->Lookup(expected);
 				
 				if (gdecl && edecl) // objects
 					{
@@ -385,26 +409,26 @@ void Call::CheckArguments(FnDecl *fndecl) {
     }
 }
 
-void Call::Check() {
+void Call::CheckStmts() {
 	
 	PrintDebug("debug", "==================CALL::CHECK");
   if (this->actuals)
     {
 		for (int i = 0; i < actuals->NumElements(); i++)
-			this->actuals->Nth(i)->Check();
+			this->actuals->Nth(i)->CheckStmts();
     }
 	
   Decl *decl = NULL;
 	
   if (this->base)
     {
-		this->base->Check();
+		this->base->CheckStmts();
 		const char *name = this->base->GetTypeName();
       // all the methods are public
       // no need to check the accessibility
 		if (name)
 			{
-			if ((decl = Program::global_table->Lookup(name)) != NULL)
+			if ((decl = Program::scope_table->Lookup(name)) != NULL)
 				{
 	      decl = this->field->CheckIdDecl(decl->GetScopeTable(), this->field->GetName());
 	      if ((decl == NULL) || (typeid(*decl) != typeid(FnDecl)))
@@ -448,13 +472,13 @@ NewExpr::NewExpr(yyltype loc, NamedType *c) : Expr(loc) {
   (cType=c)->SetParent(this);
 }
 
-void NewExpr::Check() {
+void NewExpr::CheckStmts() {
   if (this->cType)
     {
 		const char *name = this->cType->GetTypeName();
 		if (name)
 			{
-			Decl *decl = Program::global_table->Lookup(name);
+			Decl *decl = Program::scope_table->Lookup(name);
 			if ((decl == NULL) || (typeid(*decl) != typeid(ClassDecl)))
 				ReportError::IdentifierNotDeclared(new Identifier(*this->cType->GetLocation(), name), LookingForClass);
 			}
@@ -481,8 +505,8 @@ const char *NewArrayExpr::GetTypeName() {
     return NULL;
 }
 
-void NewArrayExpr::Check() {
-  this->size->Check();
+void NewArrayExpr::CheckStmts() {
+  this->size->CheckStmts();
   if (strcmp(this->size->GetTypeName(), "int"))
     ReportError::NewArraySizeNotInteger(this->size);
   this->elemType->CheckTypeError();
@@ -505,10 +529,10 @@ PostfixExpr::PostfixExpr(yyltype loc, LValue *lv, Operator *op)
   (this->optr=op)->SetParent(this);
 }
 
-void PostfixExpr::Check() {
+void PostfixExpr::CheckStmts() {
   if (this->lvalue)
     {
-		this->lvalue->Check();
+		this->lvalue->CheckStmts();
 		const char *name = this->lvalue->GetTypeName();
 		if (strcmp(name, "int") && strcmp(name, "double"))
 			ReportError::IncompatibleOperand(this->optr, this->lvalue->GetType());

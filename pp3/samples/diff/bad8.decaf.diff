@@ -1,30 +1,4 @@
-2,5c2,5
-< *** Error line 18.
-<   red.wheels = 2;
-<       ^^^^^^
-< *** Honda field 'wheels' only accessible within class scope
----
-> *** Error line 8.
->    bool Park() { return trunk == wheels;}
->                         ^^^^^
-> *** No declaration found for variable 'trunk'
-8,11c8,11
-< *** Error line 20.
-<       red.horn = 1.0;
-<           ^^^^
-< *** Honda has no such field 'horn'
----
-> *** Error line 8.
->    bool Park() { return trunk == wheels;}
->                                  ^^^^^^
-> *** No declaration found for variable 'wheels'
-14,29c14,15
-< *** Error line 21.
-<   red.Honk();
-<       ^^^^
-< *** Honda has no such field 'Honk'
-< 
-< 
+20,30c20
 < *** Error line 22.
 <   red = (blue < red && blue == null);
 <               ^
@@ -35,6 +9,7 @@
 <   red = (blue < red && blue == null);
 <       ^
 < *** Incompatible operands: Honda = bool
+< 
 ---
-> *** Failure: Assertion failed: ast_type.cc, line 30:
->     n
+> *** Error line
+\ No newline at end of file

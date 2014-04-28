@@ -31,9 +31,13 @@ void VarDecl::PrintChildren(int indentLevel) {
 	if (type) type->Print(indentLevel+1);
 	if (id) id->Print(indentLevel+1);
 }
+
+void VarDecl::CheckStmts() {
+		// do nothing here
+}
 	// check NamedType errors
-void VarDecl::Check() {
-		//printf("=====================VarDecl::CHECK type : %s\n",this->type->GetName());
+void VarDecl::CheckDecl() {
+		PrintDebug("debug","Checking VarDecl %s \n",this->GetPrintNameForNode());
   if (this->type){
     this->type->CheckTypeError();
 	}
@@ -42,6 +46,7 @@ void VarDecl::Check() {
 
 ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<Decl*> *m) : Decl(n) {
     // extends can be NULL, impl & mem may be empty lists but cannot be NULL
+		//PrintDebug("debug", "New ClassDecl %s",n->GetName());
 	Assert(n != NULL && imp != NULL && m != NULL);
 	extends = ex;
 	if (extends) extends->SetParent(this);
@@ -49,15 +54,19 @@ ClassDecl::ClassDecl(Identifier *n, NamedType *ex, List<NamedType*> *imp, List<D
 	(members=m)->SetParentAll(this);
 	this->scope_table = new Hashtable<Decl*>;
 }
-void ClassDecl::Check() {
-		//	printf("=====================ClassDecl::CHECK \n");
+
+void ClassDecl::CheckStmts() {
   if (this->members)
     {
 		for (int i = 0; i < this->members->NumElements(); i++){
-			//printf("=====================ClassDecl::for member %s \n",i);
-			this->members->Nth(i)->Check();
+				//printf("=====================ClassDecl::for member %s \n",i);
+			this->members->Nth(i)->CheckStmts();
 		}
     }
+}
+void ClassDecl::CheckDecl() {
+	PrintDebug("debug","=====================ClassDecl::CHECK \n");
+
 	
 		// add itself to the symbol table
   this->scope_table->Enter(this->GetID()->GetName(), this);
@@ -77,18 +86,21 @@ void ClassDecl::Check() {
 				}
 				
 	      else{
+					PrintDebug("debug","Entering in scope %s",name);
 					this->scope_table->Enter(name, cur);
 				}
 				}
 			}
     }
+	
+	
   NamedType *ex = this->extends;
   while (ex)
     {
 		const char *name = ex->GetID()->GetName();
 		if (name)
 			{
-			Node *node = Program::global_table->Lookup(name);
+			Node *node = Program::scope_table->Lookup(name);
 			if (node == NULL)
 				{
 				//printf("=====================ClassDecl::node==null stms\n");
@@ -146,7 +158,7 @@ void ClassDecl::Check() {
 			Identifier *id = implement->GetID();
 			if (id)
 				{
-	      Node *node = Program::global_table->Lookup(id->GetName());
+	      Node *node = Program::scope_table->Lookup(id->GetName());
 	      if (node == NULL || (typeid(*node) != typeid(InterfaceDecl)))
 					{
 					ReportError::IdentifierNotDeclared(id, LookingForInterface);
@@ -176,15 +188,24 @@ void ClassDecl::Check() {
 				}
 			}
     }
+
 	
+	  // look into local scopes
+		// again we do not go into the scope of extended classes or implemented interfaces
+  if (this->members)
+    {
+		for (int i = 0; i < this->members->NumElements(); i++)
+			this->members->Nth(i)->CheckDecl();
+    }
 }
 
-void ClassDecl::PrintChildren(int indentLevel) {
+void ClassDecl::PrintChildren(int indentLevel) 
 	id->Print(indentLevel+1);
 	if (extends) extends->Print(indentLevel+1, "(extends) ");
 	implements->PrintAll(indentLevel+1, "(implements) ");
 	members->PrintAll(indentLevel+1);
 }
+
 bool ClassDecl::IsCompatibleWith(Decl *decl)
 {
   NamedType *extends = this->GetExtends();
@@ -203,7 +224,7 @@ bool ClassDecl::IsCompatibleWith(Decl *decl)
 				{
 				if (name)
 					{
-					Decl *exdecl = Program::global_table->Lookup(name);
+					Decl *exdecl = Program::scope_table->Lookup(name);
 					if (exdecl && typeid(*exdecl) == typeid(ClassDecl))
 						return dynamic_cast<ClassDecl*>(exdecl)->IsCompatibleWith(decl);
 					}
@@ -230,7 +251,7 @@ bool ClassDecl::IsCompatibleWith(Decl *decl)
 			const char *name = extends->GetTypeName();
 			if (name)
 				{
-				Decl *exdecl = Program::global_table->Lookup(name);
+				Decl *exdecl = Program::scope_table->Lookup(name);
 				if (exdecl && typeid(*exdecl) == typeid(ClassDecl))
 					return dynamic_cast<ClassDecl*>(exdecl)->IsCompatibleWith(decl);
 				}
@@ -246,7 +267,7 @@ InterfaceDecl::InterfaceDecl(Identifier *n, List<Decl*> *m) : Decl(n) {
   this->scope_table  = new Hashtable<Decl*>;
 }
 
-void InterfaceDecl::Check() {
+void InterfaceDecl::CheckDecl() {
 	//printf("=====================InterfaceDecl::CHECK\n");
   if (this->members)
     {
@@ -304,11 +325,20 @@ bool FnDecl::HasSameTypeSig(FnDecl *fd) {
 	return false;
 }
 
-void FnDecl::Check() {
-	//printf("=====================FnDecl::Check \n");
+
+void FnDecl::CheckStmts() {
+	if (this->body){
+	PrintDebug("debug","=====================FnDecl::this-> body \n");
+		this->body->CheckStmts();
+	}
+}
+	
+void FnDecl::CheckDecl() {
+	PrintDebug("debug","=====================FnDecl::Check \n");
 	
   if (this->formals)
     {
+		PrintDebug("debug","=====================FnDecl::Formals \n");
 		for (int i = 0; i < this->formals->NumElements(); i++)
 			{
 			VarDecl *cur = this->formals->Nth(i);
@@ -322,21 +352,24 @@ void FnDecl::Check() {
 					}
 	      else
 					{
-					//printf("=====================FnDecl::Inserting in scope %s \n",name);
+					PrintDebug("debug""=====================FnDecl::Inserting in scope %s \n",name);
 					scope_table->Enter(name, cur);
 						//scope_table->printTable();
-					cur->Check();
+					cur->CheckDecl();
 					}
 				}
 			}
     }
 	
   if (this->body){
-		//printf("=====================FnDecl::this-> body \n");
-		this->body->Check();
+		PrintDebug("debug","=====================FnDecl::this-> body \n");
+		this->body->CheckDecl();
 	}
 	
 	
+
+
+
 }
 
 void FnDecl::PrintChildren(int indentLevel) {

@@ -1,8 +1,23 @@
-16c16
+4,30c4
+<      ^
+< *** Incompatible operands: int = string
+< 
+< 
+< *** Error line 7.
+<    Print(3.5, a, Pi(10));
+<          ^^^
+< *** Incompatible argument 1: double given, int/bool/string expected
+< 
+< 
+< *** Error line 7.
+<    Print(3.5, a, Pi(10));
 <                  ^^^^^^
----
->                  ^^
-23,30c23
+< *** Incompatible argument 3: double given, int/bool/string expected
+< 
+< 
+< *** Error line 8.
+<    a = 10 + main;
+<             ^^^^
 < *** No declaration found for variable 'main'
 < 
 < 
@@ -12,5 +27,5 @@
 < *** int has no such field 'length'
 < 
 ---
-> *** No declaration found for variable 'main'
+>      ^
 \ No newline at end of file

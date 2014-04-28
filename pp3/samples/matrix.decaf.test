@@ -1,61 +1,18 @@
 
-*** Error line 16.
-	   Print(Get(i,j), "\t");
-                 ^^^
-*** No declaration found for function 'Get'
+*** Error line 67.
+    this.data = d;
+         ^^^^
+*** SparseItem has no such field 'data'
 
 
-*** Error line 25.
-	   Set(i,j, i+j);
-           ^^^
-*** No declaration found for function 'Set'
+*** Error line 68.
+    this.y = y;
+         ^
+*** SparseItem has no such field 'y'
 
 
-*** Error line 26.
-    Set(2,3,4);
-    ^^^
-*** No declaration found for function 'Set'
+*** Error line 69.
+    this.next = next;
+         ^^^^
+*** SparseItem has no such field 'next'
 
-
-*** Error line 27.
-    Set(4,6,2);
-    ^^^
-*** No declaration found for function 'Set'
-
-
-*** Error line 28.
-    Set(2,3,5);
-    ^^^
-*** No declaration found for function 'Set'
-
-
-*** Error line 29.
-    Set(0,0,1);
-    ^^^
-*** No declaration found for function 'Set'
-
-
-*** Error line 30.
-    Set(1,6,3);
-    ^^^
-*** No declaration found for function 'Set'
-
-
-*** Error line 31.
-    Set(7,7,7);
-    ^^^
-*** No declaration found for function 'Set'
-
-
-*** Error line 44.
-    m = NewArray(10, int[]);
-    ^
-*** No declaration found for variable 'm'
-
-
-*** Error line 46.
-      m[i] = NewArray(10, int);
-      ^
-*** No declaration found for variable 'm'
-
-libc++abi.dylib: terminating with uncaught exception of type std::bad_typeid: std::bad_typeid

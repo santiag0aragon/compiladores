@@ -124,7 +124,7 @@ class ArithmeticExpr : public CompoundExpr
   public:
     ArithmeticExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     ArithmeticExpr(Operator *op, Expr *rhs) : CompoundExpr(op,rhs) {}
-    void Check();
+    void CheckStmts();
     Type *GetType() { return right->GetType(); }
     const char *GetTypeName() { return right->GetTypeName();}
 
@@ -135,7 +135,7 @@ class RelationalExpr : public CompoundExpr
 {
   public:
     RelationalExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
-    void Check();
+    void CheckStmts();
     Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
     const char *GetPrintNameForNode() { return "RelationalExpr"; }
@@ -147,7 +147,7 @@ class EqualityExpr : public CompoundExpr
   public:
     EqualityExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     const char *GetPrintNameForNode() { return "EqualityExpr"; }
-    void Check();
+    void CheckStmts();
     Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
     
@@ -158,7 +158,7 @@ class LogicalExpr : public CompoundExpr
   public:
     LogicalExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     LogicalExpr(Operator *op, Expr *rhs) : CompoundExpr(op,rhs) {}
-    void Check();
+    void CheckStmts();
     Type *GetType() { return Type::boolType; }
     const char *GetTypeName() { return "bool"; }
     const char *GetPrintNameForNode() { return "LogicalExpr"; }
@@ -170,7 +170,7 @@ class AssignExpr : public CompoundExpr
   public:
     AssignExpr(Expr *lhs, Operator *op, Expr *rhs) : CompoundExpr(lhs,op,rhs) {}
     const char *GetPrintNameForNode() { return "AssignExpr"; }
-    void Check();
+    void CheckStmts();
     Type *GetType() { return left->GetType(); }
     const char *GetTypeName() { return left->GetTypeName(); }
 };
@@ -187,7 +187,8 @@ class This : public Expr
   public:
     This(yyltype loc) : Expr(loc) {}
     const char *GetPrintNameForNode() { return "This"; }
-    void Check();
+    void CheckStmts();
+
 };
 
 class ArrayAccess : public LValue 
@@ -197,7 +198,7 @@ class ArrayAccess : public LValue
     
   public:
     ArrayAccess(yyltype loc, Expr *base, Expr *subscript);
-    void Check();
+    void CheckStmts();
     Type *GetType();
     const char *GetTypeName();
     const char *GetPrintNameForNode() { return "ArrayAccess"; }
@@ -218,7 +219,7 @@ class FieldAccess : public LValue
     
   public:
     FieldAccess(Expr *base, Identifier *field); //ok to pass NULL base
-    void Check(); // its type is decided here
+    void CheckStmts(); // its type is decided here
     Identifier *GetField() { return field; }
 		Type *GetType(){return this->type;}
     //const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
@@ -241,7 +242,7 @@ class Call : public Expr
   public:
     Call(yyltype loc, Expr *base, Identifier *field, List<Expr*> *args);
     void CheckArguments(FnDecl *fndecl); // check arguments against formal parameters
-    void Check(); // its type is decided here
+    void CheckStmts(); // its type is decided here
     Type* GetType() { return type; }
     const char* GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
     const char *GetPrintNameForNode() { return "Call"; }
@@ -255,7 +256,7 @@ class NewExpr : public Expr
     
   public:
     NewExpr(yyltype loc, NamedType *clsType);
-    void Check();
+    void CheckStmts();
     Type* GetType() { return cType; }
     const char* GetTypeName() { if (cType) return cType->GetTypeName(); else return NULL;  }
     const char *GetPrintNameForNode() { return "NewExpr"; }
@@ -270,7 +271,7 @@ class NewArrayExpr : public Expr
     
   public:
     NewArrayExpr(yyltype loc, Expr *sizeExpr, Type *elemType);
-    void Check();
+    void CheckStmts();
 		//const char *GetTypeName(){if (elemType) return elemType->GetTypeName(); else return NULL; };
 		const char *GetTypeName();
 		Type *GetType() { return elemType ;}
@@ -301,7 +302,7 @@ class PostfixExpr : public Expr
 
   public:
     PostfixExpr(yyltype loc, LValue *lv, Operator *op);
-    void Check();
+    void CheckStmts();
     Type* GetType() { if (lvalue) return lvalue->GetType(); else return NULL; }
     const char *GetTypeName() { if (lvalue) return lvalue->GetTypeName(); else return NULL; }
     const char *GetPrintNameForNode() { return "PostfixExpr"; }

@@ -45,7 +45,8 @@ public:
 	Type *GetType() { return type; }
 	const char *GetTypeName() { if (type) return type->GetTypeName(); else return NULL; }
 	bool HasSameTypeSig(VarDecl *vd);
-	void Check();
+	void CheckDecl();
+	void CheckStmts();
 	const char *GetPrintNameForNode() { return "VarDecl"; }
 	void PrintChildren(int indentLevel);
 };
@@ -63,7 +64,8 @@ public:
 						List<NamedType*> *implements, List<Decl*> *members);
   NamedType *GetExtends() { return extends; }
   List<NamedType*> *GetImplements() { return implements; }
-  void Check();
+  void CheckStmts();
+	void CheckDecl();
   bool IsCompatibleWith(Decl *decl);
   Hashtable<Decl*>* GetScopeTable() { return scope_table; }
   const char *GetPrintNameForNode() { return "ClassDecl"; }
@@ -82,7 +84,7 @@ public:
 	void CheckDeclError();
 	List<Decl*> *GetMembers() { return members; }
 	Hashtable<Decl*>* GetScopeTable() { return scope_table; }
-	void Check();
+	void CheckDecl();
 	const char *GetPrintNameForNode() { return "InterfaceDecl"; }
 	void PrintChildren(int indentLevel);
 };
@@ -98,7 +100,8 @@ protected:
 public:
 	FnDecl(Identifier *name, Type *returnType, List<VarDecl*> *formals);
 	void SetFunctionBody(StmtBlock *b);
-  void Check();
+  void CheckDecl();
+  void CheckStmts();
   Type *GetType() { return returnType; }
   List<VarDecl*> *GetFormals() { return formals; }
   const char *GetTypeName() { if (returnType) return returnType->GetTypeName(); else return NULL; }

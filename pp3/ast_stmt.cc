@@ -9,14 +9,24 @@
 #include "ast_expr.h"
 #include "errors.h"
 
-Hashtable<Decl*> *Program::global_table  = new Hashtable<Decl*>;
+Hashtable<Decl*> *Program::scope_table  = new Hashtable<Decl*>;
 
 Program::Program(List<Decl*> *d) {
 	Assert(d != NULL);
 	(decls=d)->SetParentAll(this);
 }
+void Program::Check(){
+	CheckDecl();
+	CheckStmts();
+}
 
-void Program::Check() {
+void Program::CheckStmts(){
+	PrintDebug("debug","=====================Program::CHECK stmt\n");
+	for (int i = 0; i < this->decls->NumElements(); i++)
+    this->decls->Nth(i)->CheckStmts();
+}
+
+void Program::CheckDecl() {
 	/* pp3: here is where the semantic analyzer is kicked off.
 	 *      The general idea is perform a tree traversal of the
 	 *      entire program, examining all constructs for compliance
@@ -24,8 +34,8 @@ void Program::Check() {
 	 *      checking itself, which makes for a great use of inheritance
 	 *      and polymorphism in the node classes.
 	 */
-		//printf("-----INICIO\n");
-		//printf("=====================Program::CHECK decl\n");
+		PrintDebug("debug","-----INICIO\n");
+		PrintDebug("debug","=====================Program::CHECK decl\n");
   if (this->decls)//decl
     {
 		for (int i = 0; i < this->decls->NumElements(); i++)
@@ -36,19 +46,19 @@ void Program::Check() {
 			const char *name = cur->GetID()->GetName();
 			if (name)
 				{
-	      if ((prev = Program::global_table->Lookup(name)) != NULL){
+	      if ((prev = Program::scope_table->Lookup(name)) != NULL){
    				//printf("=====================Program::CHECK decl encontrado en prev %s\n",name);
           ReportError::DeclConflict(cur, prev);
         }
 	      else
-					//printf("=====================Program::CHECK decl guardando %s\n",name);
-		      global_table->Enter(name, cur);
-					//global_table->printTable();
+					PrintDebug("debug","=====================Program::CHECK decl guardando %s\n",name);
+		      scope_table->Enter(name, cur);
+					//scope_table->printTable();
 				}
 			}
-		for (int i = 0; i < this->decls->NumElements(); i++){//Stmt
-			//printf("=====================Program::CHECK stms %d\n",i);
-			this->decls->Nth(i)->Check();
+		for (int i = 0; i < this->decls->NumElements(); i++){
+			PrintDebug("debug","=====================Program::CHECK decl %d\n",i);
+			this->decls->Nth(i)->CheckDecl();
 		}
 		}
 
@@ -60,8 +70,19 @@ StmtBlock::StmtBlock(List<VarDecl*>* d, List<Stmt*>* s) {
 	(stmts=s)->SetParentAll(this);
 	this->scope_table  = new Hashtable<Decl*>;
 }
-void StmtBlock::Check(){
 
+void StmtBlock::CheckStmts(){
+	if (this->stmts)
+    {
+		for (int i = 0; i < this->stmts->NumElements(); i++)
+			{
+			Stmt *stmt = this->stmts->Nth(i);
+			stmt->CheckStmts();
+			}
+    }
+}
+void StmtBlock::CheckDecl(){
+	PrintDebug("debug","Checking StmtBlock %s \n",this->GetPrintNameForNode());
   if (this->decls)//decl
     {
 			//printf("=====================StmtBlock::CHECK this->decls\n");
@@ -81,7 +102,7 @@ void StmtBlock::Check(){
 					scope_table->Enter(name, cur);
 						//scope_table->printTable();
 					PrintDebug("debug","=====================StmtBlock::CHECK Enter\n");
-					cur->Check();
+					cur->CheckDecl();
 						
 					}
 				}
@@ -89,23 +110,15 @@ void StmtBlock::Check(){
     }
 	if (this->stmts) //stmt
     {
-		//printf("=====================StmtBlock::CHECK this->stms\n");
+		PrintDebug("debug","=====================StmtBlock::CHECK this->stms\n");
 		for (int i = 0; i < this->stmts->NumElements(); i++)
 			{
-			//printf("=======================StmtBlock::Checking stmt %d\n",i);
+			PrintDebug("debug","=======================StmtBlock::Checking stmt %d\n",i);
 			Stmt *stmt = this->stmts->Nth(i);
-			stmt->Check();
+			stmt->CheckDecl();
 			}
     }
-		// if (this->stmts)
-		//    {
-		//      //printf("=====================StmtBlock::CHECK this->stmts\n");
-		//      for (int i = 0; i < this->stmts->NumElements(); i++)
-		//        {
-		//          Stmt *stmt = stmts->Nth(i);
-		//          stmt->Check();
-		//        }
-		//    }
+
 }
 
 
@@ -114,15 +127,18 @@ ConditionalStmt::ConditionalStmt(Expr *t, Stmt *b) {
 	(test=t)->SetParent(this);
 	(body=b)->SetParent(this);
 }
-void ConditionalStmt::Check() {
-  this->test->Check();//stmt
+
+void ConditionalStmt::CheckStmts() {
+  this->test->CheckStmts();
   if (strcmp(this->test->GetTypeName(), "bool"))
     ReportError::TestNotBoolean(this->test);
 	
-  this->body->Check();
-	
-	
-		//this->body->Check();//decl
+  this->body->CheckStmts();
+}
+
+void ConditionalStmt::CheckDecl() {
+
+	this->body->CheckDecl();//decl
 }
 
 ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) {
@@ -130,29 +146,38 @@ ForStmt::ForStmt(Expr *i, Expr *t, Expr *s, Stmt *b): LoopStmt(t, b) {
 	(init=i)->SetParent(this);
 	(step=s)->SetParent(this);
 }
-void ForStmt::Check() {
+
+void ForStmt::CheckStmts() {
   if (this->init)//stmt
-    this->init->Check();
+    this->init->CheckStmts();
   if (this->step)
-    this->step->Check();
-  ConditionalStmt::Check();
+    this->step->CheckStmts();
+  ConditionalStmt::CheckStmts();
 }
-void WhileStmt::Check() {
-  ConditionalStmt::Check();
+
+void WhileStmt::CheckStmts() {
+  ConditionalStmt::CheckStmts();
 }
+
 IfStmt::IfStmt(Expr *t, Stmt *tb, Stmt *eb): ConditionalStmt(t, tb) {
 	Assert(t != NULL && tb != NULL); // else can be NULL
 	elseBody = eb;
 	if (elseBody) elseBody->SetParent(this);
 }
-void IfStmt::Check() {
-  ConditionalStmt::Check();
+
+void IfStmt::CheckDecl() {
+  ConditionalStmt::CheckDecl();
   if (this->elseBody)
-    this->elseBody->Check();
+    this->elseBody->CheckDecl();
 }
 
+void IfStmt::CheckStmts() {
+  ConditionalStmt::CheckStmts();
+  if (this->elseBody)
+    this->elseBody->CheckStmts();
+}
 
-void BreakStmt::Check() {
+void BreakStmt::CheckStmts() {
   Node *parent = this->GetParent();
   while (parent)
     {
@@ -170,7 +195,7 @@ ReturnStmt::ReturnStmt(yyltype loc, Expr *e) : Stmt(loc) {
 	(expr=e)->SetParent(this);
 }
 
-void ReturnStmt::Check() {
+void ReturnStmt::CheckStmts() {
 	
   const char *expected; //stmt
   Node *parent = this->GetParent();
@@ -182,13 +207,13 @@ void ReturnStmt::Check() {
     }
   if (this->expr)
     {
-		this->expr->Check();
+		this->expr->CheckStmts();
 		const char *given = expr->GetTypeName();
 		
 		if (given && expected)
 			{
-			Decl *gdecl = Program::global_table->Lookup(given);
-			Decl *edecl = Program::global_table->Lookup(expected);
+			Decl *gdecl = Program::scope_table->Lookup(given);
+			Decl *edecl = Program::scope_table->Lookup(expected);
 			
 			if (gdecl && edecl) // objects
 				{
@@ -227,25 +252,27 @@ void DefaultStmt::PrintChildren(int indentLevel) {
 	if (stmts) stmts->PrintAll(indentLevel+1);
 }
 
+void DefaultStmt::CheckDecl() {
 
-void DefaultStmt::Check() {
+	  if (this->stmts)//decl{
+	 for (int i = 0; i < this->stmts->NumElements(); i++){
+	 	Stmt *stmt = this->stmts->Nth(i);
+	 	stmt->CheckDecl();
+	 }
+}
+
+	
+void DefaultStmt::CheckStmts() {
   if (this->stmts)//stmt
     {
 		for (int i = 0; i < this->stmts->NumElements(); i++)
 			{
 			Stmt *stmt = this->stmts->Nth(i);
-			stmt->Check();
+			stmt->CheckStmts();
 			}
     }
 	
-	/*  if (this->stmts)//decl
-	 {
-	 for (int i = 0; i < this->stmts->NumElements(); i++)
-	 {
-	 Stmt *stmt = this->stmts->Nth(i);
-	 stmt->Check();
-	 }
-	 }*/
+
 }
 
 
@@ -262,34 +289,39 @@ void SwitchStmt::PrintChildren(int indentLevel) {
 	if (defaults) defaults->Print(indentLevel+1);
 }
 
-void SwitchStmt::Check() {
-  if (this->expr)//Stmt
-    this->expr->Check();
+void SwitchStmt::CheckDecl() {
 	
-  if (this->cases)
-    {
-		for (int i = 0; i < this->cases->NumElements(); i++)
-			{
-			CaseStmt *stmt = this->cases->Nth(i);
-			stmt->Check();
-			}
-    }
-	
-  if (this->defaults)
-    this->defaults->Check();
-	
-	/*  if (this->cases)//decl
+	  if (this->cases)//decl
 	 {
 	 for (int i = 0; i < this->cases->NumElements(); i++)
 	 {
 	 CaseStmt *stmt = this->cases->Nth(i);
-	 stmt->Check();
+	 stmt->CheckDecl();
 	 }
 	 }
 	 
 	 if (this->defaults)
-	 this->defaults->Check();*/
+	 this->defaults->CheckDecl();
 }
+
+void SwitchStmt::CheckStmts() {
+	if (this->expr)//Stmt
+	this->expr->CheckStmts();
+
+	if (this->cases)
+	{
+		for (int i = 0; i < this->cases->NumElements(); i++)
+			{
+			CaseStmt *stmt = this->cases->Nth(i);
+			stmt->CheckStmts();
+			}
+		}
+
+	if (this->defaults)
+		this->defaults->CheckStmts();
+	
+	}
+
 void Program::PrintChildren(int indentLevel) {
 	decls->PrintAll(indentLevel+1);
 	printf("\n");
@@ -323,13 +355,13 @@ void PrintStmt::PrintChildren(int indentLevel) {
 	args->PrintAll(indentLevel+1, "(args) ");
 }
 
-void PrintStmt::Check() {
+void PrintStmt::CheckStmts() {
   if (this->args)
     {
 		for (int i = 0; i < this->args->NumElements(); i++)
 			{
 			Expr *expr = this->args->Nth(i);
-			expr->Check();
+			expr->CheckStmts();
 			const char *typeName = expr->GetTypeName();
 			if (typeName && strcmp(typeName, "string") && strcmp(typeName, "int") && strcmp(typeName, "bool"))
 				ReportError::PrintArgMismatch(expr, (i+1), new Type(typeName));

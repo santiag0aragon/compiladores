@@ -45,8 +45,9 @@ bool NamedType::IsEquivalentTo(Type *nt) {
 
 void NamedType::CheckTypeError() {
   //printf("=====================NamedType::CheckTypeError ");
+	PrintDebug("debug","Checking NamedType %s \n",this->id->GetName());
   const char *name = this->id->GetName();
-  Decl *decl = Program::global_table->Lookup(name);
+  Decl *decl = Program::scope_table->Lookup(name);
   if ((decl == NULL) || (((typeid(*decl) != typeid(ClassDecl))) && ((typeid(*decl) != typeid(InterfaceDecl)))))
     {
 		ReportError::IdentifierNotDeclared(id, LookingForType);
@@ -62,17 +63,11 @@ const char* ArrayType::GetTypeName() {
   if (this->elemType)
     {
 		const char* d = "[]";
-		int newSize = strlen(this->elemType->GetTypeName()) +strlen(d);
+		int newSize = strlen(this->elemType->GetTypeName()) + strlen(d);
 		char* newBuffer = (char *)malloc(newSize);
 		strcpy(newBuffer, this->elemType->GetTypeName());
 		strcat(newBuffer,d);
 		const char* str = newBuffer;
-			//std::string delim1 ("[]");
-			//PrintDebug("debug", "PRINTING %s","");
-			//std::string str2 = this->elemType->GetTypeName() + delim1;
-			//str2+= delim1;
-			//const char *str1 = str2.append(delim1).c_str();
-			//	return str.c_str();
 		PrintDebug("debug", "PRINTING %s",str);
 		return str;
     }
@@ -90,7 +85,7 @@ bool ArrayType::IsEquivalentTo(Type *at) {
 }
 
 void ArrayType::CheckTypeError() {
-	//printf("=====================ArrayType::CheckTypeError ");
+	PrintDebug("debug","Checking NamedType %s \n",this->elemType->GetTypeName());
   this->elemType->CheckTypeError();
 }
 
