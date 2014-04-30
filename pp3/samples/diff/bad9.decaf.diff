@@ -1,5 +1,4 @@
-4,30c4
-<      ^
+5,30c5
 < *** Incompatible operands: int = string
 < 
 < 
@@ -27,5 +26,5 @@
 < *** int has no such field 'length'
 < 
 ---
->      ^
+> *** Incompatible operands: int 
 \ No newline at end of file

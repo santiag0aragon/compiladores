@@ -296,24 +296,36 @@ void FieldAccess::CheckStmts() {
 			while (parent)
 				{
 	      Hashtable<Decl*> *scope_table = parent->GetScopeTable();
-				/*if(scope_table){
-					PrintDebug("debug","=====================FieldAccess::Printing scope table for ...\n");
-											parent->Print(1); //uncomment
-					PrintDebug("debug","\n===================================\n");
-						scope_table->printTable();  //uncomment
-				}
-				*/
+/*				if(scope_table){
+
+				}*/
+				
 				if (scope_table)
 					if ((cldecl = scope_table->Lookup(name)) != NULL)
 						{
-						PrintDebug("debug", "=====================FieldAccess:: Trying %s",cldecl->GetID());
+						PrintDebug("debug","=====================FieldAccess::Printing scope table for ...\n");
+						//parent->Print(1); //uncomment
+						//scope_table->printTable();  //uncomment
+						PrintDebug("debug","\n===================================\n");
+
+						
+						
+						
+
 						decl = this->field->CheckIdDecl(cldecl->GetScopeTable(), this->field->GetName());
-						if ((decl == NULL) || (typeid(*decl) != typeid(VarDecl)))
-							PrintDebug("debug","=====================FieldAccess::Error 1 \n");
+						PrintDebug("debug", "=====================FieldAccess:: Trying %s, %s,%s,%S",this->field->GetName());
+						if ((decl == NULL) || (typeid(*decl) != typeid(VarDecl))){
+							if(decl == NULL)
+								PrintDebug("debug","=====================FieldAccess::Error 1.1 \n");
+						if (typeid(*decl) != typeid(VarDecl))
+								PrintDebug("debug","=====================FieldAccess::Error 1.2 \n");
 							ReportError::FieldNotFoundInBase(this->field, new Type(name));
 						}
+						}
+				PrintDebug("debug","=====================FieldAccess::Error 1 \n");
 	      parent = parent->GetParent();
 				}
+			PrintDebug("debug","\n===================================\n");
 			
 			if (cldecl == NULL)
 				{
@@ -321,11 +333,13 @@ void FieldAccess::CheckStmts() {
 	        {
 					decl = this->field->CheckIdDecl(cldecl->GetScopeTable(), this->field->GetName());
 					if ((decl != NULL) && (typeid(*decl) == typeid(VarDecl))){
-						ReportError::InaccessibleField(this->field, new Type(name)); // data member is private
 						PrintDebug("debug","=====================FieldAccess::Error 2 \n");
+						ReportError::InaccessibleField(this->field, new Type(name)); // data member is private
+						
 					}else{
-						ReportError::FieldNotFoundInBase(this->field, new Type(name)); // no such field
 						PrintDebug("debug","=====================FieldAccess::Error 3 \n");
+						ReportError::FieldNotFoundInBase(this->field, new Type(name)); // no such field
+						
 					}
 	        }
 	      else{ // for those with no symbol tables, e.g. int[]
@@ -443,6 +457,7 @@ void Call::CheckStmts() {
 				}
 			else
 				{
+				PrintDebug("debug", "Call::error 4");
 	      ReportError::FieldNotFoundInBase(this->field, new Type(name));
 				}
 			}
